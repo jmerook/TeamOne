@@ -1,0 +1,50 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Jacob
+ * Date: 2/21/18
+ * Time: 5:49 PM
+ */
+
+
+$user = 'root';
+$password = 'root';
+$db = 'clueless';
+$host = 'localhost';
+$port = 3306;
+
+$mysql = mysqli_init();
+$success = mysqli_real_connect(
+    $mysql,
+    $host,
+    $user,
+    $password,
+    $db,
+    $port
+);
+
+//build query
+$result = $mysql->query("SELECT * FROM clueless.user");
+
+
+//get the set of users
+while ($row = $result->fetch_object())
+{
+    $data[] = $row;
+}
+
+
+// Free result set
+$result->close();
+
+//write output to the screen
+for ($i=0; $i < 5; $i++)
+{
+    echo $data[$i]->userName;
+    echo $data[$i]->firstName;
+    echo $data[$i]->lastName;
+    echo $data[$i]->id;
+    echo "<br />";
+}
+
+?>
