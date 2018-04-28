@@ -19,8 +19,28 @@ $user = $db->getUser($_POST["email"], $_POST["password"] );
 //this will check to see what is returned and take action based on what is returned.
 if( is_object($user))
 {
+    //start the users session
+    session_start();
+
+    // to change a session variable, just overwrite it
+    //$_SESSION["user"] = $user;
+
+
+
+    $_SESSION["userName"]  = $user->getUserName();
+    $_SESSION["firstName"] = $user->getFirstName();
+    $_SESSION["lastName"]  = $user->getLastName();
+    $_SESSION["id"]        = $user->getID();
+
+
+    //echo "<pre>";
+    //print_r($_SESSION);
+    //echo "</pre";
+
+
+
     //redirect to the game board home
-    header('Location: ./home.html');
+    header('Location: ./home.phtml');
 
 }
 else

@@ -1,3 +1,15 @@
+<?php  session_start();
+//check to see if the session is set, if not the redirect them back to the
+//login page. they should not be able to access this page unless they are logged in
+//or else it will break the game since it requires session variables such as username to
+//populate the screen.
+
+//if the session variable is NOT set, then send them back
+if( isset($_SESSION["userName"]) <> 1 )
+{
+    header('Location: ./index.html');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +20,7 @@
     <link rel="icon" href="../../favicon.ico">
 
     <title>Clue-less!</title>
+
 
     <!-- Bootstrap core CSS -->
     <link href="./css/bootstrap.css" rel="stylesheet">
@@ -20,7 +33,7 @@
 <body>
 <div class="container">
 
-    <h1>Grid system to use for game</h1>
+    <h1>Welcome, <?php echo $_SESSION["userName"] . "!"; ?> <br/ >Here is the grid system to use for game</h1>
     <p class="lead">Basic grid layout to use for game board.</p>
 
     <h3>Movement Rules</h3>

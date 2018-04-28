@@ -36,6 +36,21 @@ class User
   {
       return $this->userName;
   }
+
+  public function getFirstName()
+  {
+      return $this->firstName;
+  }
+
+  public function getLastName()
+  {
+      return $this->lastName;
+  }
+
+  public function getID()
+  {
+      return $this->id;
+  }
 }
 
 
