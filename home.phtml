@@ -1,4 +1,8 @@
-<?php  session_start();
+<?php
+
+session_start();
+include "Database.php";
+include "User.php";
 //check to see if the session is set, if not the redirect them back to the
 //login page. they should not be able to access this page unless they are logged in
 //or else it will break the game since it requires session variables such as username to
@@ -36,7 +40,100 @@ if( isset($_SESSION["userName"]) <> 1 )
     <h1>Welcome, <?php echo $_SESSION["userName"] . "!"; ?> <br/ >Here is the grid system to use for game</h1>
     <p class="lead">Basic grid layout to use for game board.</p>
 
+    <h3>Available Players</h3>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">User Name</th>
+            <th scope="col">First name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+
+        ini_set('display_errors',"1");
+        $db = new Database();
+
+        //returns a list of available players
+        $list = $db->getAvailablePlayers();
+
+
+        //    print_r($list);
+        $i = 0;
+        foreach ($list as $item)
+        {
+            //echo "<li>" . $item->getUserName() . "</li>";
+            $i++;
+
+            echo "<tr>";
+            echo "<th>" . $item->getUserName() . "</th>";
+            echo "<td>" . $item->getFirstName() . "</td>";
+            echo "<td>" . $item->getLastName() . "</td>";
+            echo "<td>" . $item->getID() . "</td>";
+            echo "</tr>";
+
+        $i++;
+        }
+
+        ?>
+        </tbody>
+    </table>
+
+    <h3>Current Games</h3>
+    <h5>These are the current games that are happening</h5>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Game #</th>
+            <th scope="col"># players</th>
+            <th scope="col">open to join?</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $db = new Database();
+
+        //returns a list of available players
+        $list = $db->getAvailablePlayers();
+
+
+        //    print_r($list);
+        $i = 0;
+        foreach ($list as $item)
+        {
+            //echo "<li>" . $item->getUserName() . "</li>";
+
+
+            echo "<tr>";
+            echo "<th>" . "test Game" . "</th>";
+            echo "<td>" . "$i out of 4" . "</td>";
+            echo "<td>" . "yes" . "</td>";
+            echo "<td>" . "<input type='checkbox' name='test' value='test'/>" . "</td>";
+            echo "</tr>";
+
+            $i++;
+        }
+
+        //this is a test row to show a game that is full
+        echo "<tr>";
+        echo "<th>" . "test Game" . "</th>";
+        echo "<td>" . "4 out of 4" . "</td>";
+        echo "<td>" . "no" . "</td>";
+        echo "<td>" . "<input type='checkbox' name='test' value='test' disabled/>" . "</td>";
+        echo "</tr>";
+        ?>
+        </tbody>
+    </table>
+
+
+
     <h3>Movement Rules</h3>
+    <h4>**make this into its own FAQ page**</h4>
     <h4>If you are in a room, you may do one of the following</h4>
     <ul>
         <li>Move through one of the doors to the hallway (if it is not blocked).</li>
@@ -53,7 +150,7 @@ if( isset($_SESSION["userName"]) <> 1 )
 
     <div class="container">
 
-        <!-- one of these will show up dynamically depending if you are in a room or a halwayby PHP-->
+        <!-- one of these will show up dynamically depending if you are in a room or a hallway PHP-->
         <div class="row">
             <button class="col-4">Move to Hallway</button>
             <button class="col-4">Take Secret Passage</button>

@@ -41,6 +41,28 @@ class Database
   }
 
 
+  public function getAvailablePlayers()
+  {
+      //get all available players
+      //TODO: need to add another column to the DB table for a flag so that we can determine which players are currently in a game
+      $stmt = $this->pdo->query('SELECT * FROM clueless.user');
+
+      //$stmt->execute();
+      $list = array();
+
+      while ($user = $stmt->fetch())
+
+      {
+          $obj = new User($user['userName'], $user['firstName'], $user['lastName'], $user['password'], $user['id']);
+          array_push($list,$obj);
+
+      }
+
+      return $list;
+
+
+  }
+
   public function getUser($userName, $password)
   {
       //$stmt = $this->$pdo->query('SELECT name FROM users');
@@ -98,50 +120,9 @@ class Database
       }
       else
       {
-          //echo "there are no users in the DB with those credentials";
-          return 0; // does this work with PHP?
+
+          return 0;
       }
-
-
-      //------------------------
-
-      //check to see if the username and password are correct, if so, query to DB.
-
-      //build query to get results back that have the username
-      //$result = $mysql->query("SELECT * FROM clueless.user WHERE userName = " . $email . " AND password" . $password);
-
-
-
   }
-
-
 }
-
-
-//------------------------------------------------------------------------------------
-//this is how you would call it in the object oriented file after you set
-//the reference at the top of the page
-//------------------------------------------------------------------------------------
-
-// Create two new people
-//use php funciton to call the last index of the table, then add '++' to that to add the next ID
-/*
-$User1 = new User(1 , "Bob", 34);
-$User2 = new User(2, "John", 41);
-
-// Output their starting point
-echo "<pre>User 1: ", print_r($User1, TRUE), "</pre>";
-echo "<pre>User 2: ", print_r($User2, TRUE), "</pre>";
-
-// Give Tom a promotion and a birthday
-$User1->changeName("Bob1");
-$User1->happyBirthday();
-
-// John just gets a year older
-$User2->happyBirthday();
-
-// Output the ending values
-echo "<pre>User 1: ", print_r($User1, TRUE), "</pre>";
-echo "<pre>User 2: ", print_r($User2, TRUE), "</pre>";
-*/
 
