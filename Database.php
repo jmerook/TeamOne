@@ -87,8 +87,7 @@ class Database
   {
       $stmt = $this->pdo->prepare('INSERT INTO clueless.game_board (gameName, secretEnvelope) VALUES (:gameName, :secretEnvelope)');
 
-//INSERT INTO `clueless`.`game_board` (`gameName`, `secretEnvelope`) VALUES ('enemy', '4');
-//INSERT INTO `clueless`.`game_board` (`gameName`, `secretEnvelope`) VALUES ('moreFoes', '5');
+
       $stmt->execute(['gameName' => $gameName, 'secretEnvelope' => $secretEnvelope]);
 
 
@@ -139,40 +138,6 @@ class Database
           return $userObj;
           //create a user object and return it
 
-
-
-
-          //return $userObj;
-
-
-          /*
-          echo $user['userName'];
-          echo "<br />";
-          echo $user['firstName'];
-          echo "<br />";
-          echo $user['lastName'];
-          echo "<br />";
-          echo $user['password'];
-          echo "<br />";
-          echo $user['id'];
-          echo "<br />";
-          */
-
-          /*
-           while ($row = $stmt->fetch())
-          {
-              echo $row['userName'];
-              echo "&nbsp;";
-              echo $row['firstName'];
-              echo "&nbsp;";
-              echo $row['lastName'];
-              echo "&nbsp;";
-              echo $row['password'];
-              echo "&nbsp;";
-              echo $row['id'];
-              echo "<br />";
-          }
-          */
       }
       else
       {
