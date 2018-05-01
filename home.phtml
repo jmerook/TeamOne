@@ -46,6 +46,7 @@ if( isset($_SESSION["userName"]) <> 1 )
     <p class="lead">Basic grid layout to use for game board.</p>
 
     <h3>Available Players</h3>
+    <p>Players that are not currently assigned to a game</p>
 
     <table class="table table-striped">
         <thead>
@@ -115,7 +116,7 @@ if( isset($_SESSION["userName"]) <> 1 )
 
             echo "<tr>";
                 echo "<th>" . $item->getName(). "</th>";
-                echo "<td>" . "$i out of 4" . "</td>";
+                echo "<td>" . "$i out of 6" . "</td>";
                 echo "<td>" . "yes" . "</td>";
                     //echo "<a class='btn btn-outline-primary' href='#' role='button'>" . "Join Game" . "</a>";
                 echo "<td><a class='btn btn-outline-primary' href='joinGame.phtml?id=".$item->getID()."'>" . "Join Game" . "</a></td>";

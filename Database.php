@@ -43,9 +43,9 @@ class Database
 
   public function getAvailablePlayers()
   {
-      //get all available players
+      //get all available players that are not currently assigned to a game
       //TODO: need to add another column to the DB table for a flag so that we can determine which players are currently in a game
-      $stmt = $this->pdo->query('SELECT * FROM clueless.user');
+      $stmt = $this->pdo->query('SELECT * FROM clueless.user WHERE game IS NULL');
 
       //$stmt->execute();
       $list = array();
@@ -75,7 +75,7 @@ class Database
       while ($game = $stmt->fetch())
 
       {
-          $obj = new Game($game['id'], $game['gameName'], $game['secretEnvelop'] );
+          $obj = new Game($game['id'], $game['gameName'], $game['secretEnvelope'] );
           array_push($list,$obj);
 
       }

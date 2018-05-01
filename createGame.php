@@ -29,6 +29,7 @@ $db->createGame($_POST["gameName"],24);
 $lastGameCreated = $db->getLastCreatedGame();
 
 
+//TODO: insert validation to make sure there are no more than 6 people selected
 
 foreach ($_POST['playerSelect'] as $selectedOption)
 {
@@ -40,6 +41,9 @@ foreach ($_POST['playerSelect'] as $selectedOption)
 
 
 }
+
+
+//direct the page to the game board page to start the game
 
 
 
