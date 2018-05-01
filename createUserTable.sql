@@ -32,18 +32,6 @@ CREATE TABLE `user` (
   `password` varchar(65) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `user`
---
-
-INSERT INTO `user` (`id`, `firstName`, `lastName`, `userName`, `password`) VALUES
-(0, 'Jacob', 'Merook', 'jmerook2', 'password'),
-(1, 'Jacob', 'Merook', 'jmerook', ''),
-(2, 'Jacob', 'Merook', 'jmerook1', 'password');
-
---
--- Indexes for dumped tables
---
 
 --
 -- Indexes for table `user`
@@ -51,3 +39,18 @@ INSERT INTO `user` (`id`, `firstName`, `lastName`, `userName`, `password`) VALUE
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `userName` (`userName`);
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `firstName`, `lastName`, `userName`, `password`) VALUES
+(0, 'Jacob', 'Merook', 'jmerook2', 'password'),
+(1, 'Jacob', 'Merook', 'jacobmerook@gmail.com', 'password'),
+(2, 'Jacob', 'Merook', 'jmerook1', 'password');
+
+--
+-- Indexes for dumped tables
+--
+
+

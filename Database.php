@@ -63,6 +63,62 @@ class Database
 
   }
 
+  public function getCurrentGames()
+  {
+
+    //get all available games
+      $stmt = $this->pdo->query('SELECT * FROM clueless.game_board');
+
+      //$stmt->execute();
+      $list = array();
+
+      while ($game = $stmt->fetch())
+
+      {
+          $obj = new Game($game['id'], $game['gameName'], $game['secretEnvelop'] );
+          array_push($list,$obj);
+
+      }
+
+      return $list;
+  }
+
+  public function createGame($gameName, $secretEnvelope)
+  {
+      $stmt = $this->pdo->prepare('INSERT INTO clueless.game_board (gameName, secretEnvelope) VALUES (:gameName, :secretEnvelope)');
+
+//INSERT INTO `clueless`.`game_board` (`gameName`, `secretEnvelope`) VALUES ('enemy', '4');
+//INSERT INTO `clueless`.`game_board` (`gameName`, `secretEnvelope`) VALUES ('moreFoes', '5');
+      $stmt->execute(['gameName' => $gameName, 'secretEnvelope' => $secretEnvelope]);
+
+
+
+  }
+
+  public function getLastCreatedGame()
+  {
+
+      $stmt = $this->pdo->query('select id from clueless.game_board order by id desc limit 1;');
+
+      $gameID = $stmt->fetch();
+
+      return $gameID;
+  }
+
+  public function addPlayerToGame($userID, $gameID)
+  {
+      //$stmt = $this->pdo->prepare('SELECT * FROM clueless.user WHERE userName = :userName AND password=:password');
+      $stmt = $this->pdo->prepare('UPDATE clueless.user SET game = :gameID WHERE id = :userID');
+      //UPDATE `clueless`.`user` SET `game`='2' WHERE `id`='0';
+
+
+      $stmt->execute(['gameID' => $gameID, 'userID' => $userID]);
+
+
+
+
+  }
+
   public function getUser($userName, $password)
   {
       //$stmt = $this->$pdo->query('SELECT name FROM users');

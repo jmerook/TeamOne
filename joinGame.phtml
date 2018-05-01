@@ -1,0 +1,36 @@
+<?php
+
+session_start();
+include "Database.php";
+include "User.php";
+include "Game.php";
+
+ini_set('display_errors',"1");
+$db = new Database();
+
+//check to see if the session is set, if not the redirect them back to the
+//login page. they should not be able to access this page unless they are logged in
+//or else it will break the game since it requires session variables such as username to
+//populate the screen.
+
+//if the session variable is NOT set, then send them back
+if( isset($_SESSION["userName"]) <> 1 )
+{
+    header('Location: ./index.phtml');
+}
+
+//get the username, or better yet get the user ID
+$_SESSION["userName"];
+
+
+//get the query string for the game that you wnat to add the player to
+$_GET['id'];
+
+
+//make a form, and have the player fill out what player they want to be, and to confirm
+
+//call the DB object to add the user to the game (parameters need to be the game ID and the player ID)
+
+
+$db->addPlayerToGame();
+

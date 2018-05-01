@@ -3,6 +3,8 @@
 session_start();
 include "Database.php";
 include "User.php";
+include "Game.php";
+
 //check to see if the session is set, if not the redirect them back to the
 //login page. they should not be able to access this page unless they are logged in
 //or else it will break the game since it requires session variables such as username to
@@ -11,7 +13,7 @@ include "User.php";
 //if the session variable is NOT set, then send them back
 if( isset($_SESSION["userName"]) <> 1 )
 {
-    header('Location: ./index.html');
+    header('Location: ./index.phtml');
 }
 ?>
 <!DOCTYPE html>
@@ -23,6 +25,7 @@ if( isset($_SESSION["userName"]) <> 1 )
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
+
     <title>Clue-less!</title>
 
 
@@ -31,6 +34,8 @@ if( isset($_SESSION["userName"]) <> 1 )
 
     <!-- Custom styles for this template -->
     <link href="./css/grid.css" rel="stylesheet">
+    <script src="./js/bootstrap.js"> </script>
+    <script src="./js/bootstrap.js"> </script>
 
 </head>
 
@@ -61,7 +66,7 @@ if( isset($_SESSION["userName"]) <> 1 )
         $list = $db->getAvailablePlayers();
 
 
-        //    print_r($list);
+
         $i = 0;
         foreach ($list as $item)
         {
@@ -83,8 +88,7 @@ if( isset($_SESSION["userName"]) <> 1 )
     </table>
 
     <h3>Current Games</h3>
-    <h5>These are the current games that are happening</h5>
-
+    <h5>These are the current games that you are a part of <a class="btn btn-success" href="./createGame.phtml" role="button">Create Game</a></h5>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -99,7 +103,7 @@ if( isset($_SESSION["userName"]) <> 1 )
         $db = new Database();
 
         //returns a list of available players
-        $list = $db->getAvailablePlayers();
+        $list = $db->getCurrentGames();
 
 
         //    print_r($list);
@@ -110,26 +114,20 @@ if( isset($_SESSION["userName"]) <> 1 )
 
 
             echo "<tr>";
-            echo "<th>" . "test Game" . "</th>";
-            echo "<td>" . "$i out of 4" . "</td>";
-            echo "<td>" . "yes" . "</td>";
-            echo "<td>" . "<input type='checkbox' name='test' value='test'/>" . "</td>";
+                echo "<th>" . $item->getName(). "</th>";
+                echo "<td>" . "$i out of 4" . "</td>";
+                echo "<td>" . "yes" . "</td>";
+                    //echo "<a class='btn btn-outline-primary' href='#' role='button'>" . "Join Game" . "</a>";
+                echo "<td><a class='btn btn-outline-primary' href='joinGame.phtml?id=".$item->getID()."'>" . "Join Game" . "</a></td>";
+
             echo "</tr>";
 
             $i++;
         }
 
-        //this is a test row to show a game that is full
-        echo "<tr>";
-        echo "<th>" . "test Game" . "</th>";
-        echo "<td>" . "4 out of 4" . "</td>";
-        echo "<td>" . "no" . "</td>";
-        echo "<td>" . "<input type='checkbox' name='test' value='test' disabled/>" . "</td>";
-        echo "</tr>";
         ?>
         </tbody>
     </table>
-
 
 
     <h3>Movement Rules</h3>

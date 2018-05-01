@@ -3,6 +3,7 @@
 //include the database object class
 include "Database.php";
 include "User.php";
+include "Game.php";
 
 //include './User.php';
 
@@ -47,7 +48,7 @@ else
 {
     //no user found in the DB, return code 0 occurred.
     //need to send user back to the home screen.
-    header('Location: ./index.html');
+    header('Location: ./index.phtml');
 }
 
 
