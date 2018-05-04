@@ -46,6 +46,30 @@ CREATE TABLE `game_board` (
 ) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8
 
 
+--create the weapon table
+CREATE TABLE `weapon` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `weapon` varchar(45) NOT NULL COMMENT 'text of the crime',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+--create the suspect table
+CREATE TABLE `clueless`.`suspect` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `suspect` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+CREATE TABLE `clueless`.`room` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `room` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+
+
+
 
 
 INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (0,'Jacob','Merook','jmerook2','password',40);
@@ -56,5 +80,30 @@ INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VA
 
 INSERT INTO `game_board` (`id`,`gameName`,`secretEnvelope`) VALUES (36,'test','50');
 INSERT INTO `game_board` (`id`,`gameName`,`secretEnvelope`) VALUES (40,'test1','2');
+
+INSERT INTO `clueless`.`weapon` (`weapon`) VALUES ('Rope');
+INSERT INTO `clueless`.`weapon` (`weapon`) VALUES ('Lead Pipe');
+INSERT INTO `clueless`.`weapon` (`weapon`) VALUES ('Knife');
+INSERT INTO `clueless`.`weapon` (`weapon`) VALUES ('Wrench');
+INSERT INTO `clueless`.`weapon` (`weapon`) VALUES ('Candlestick');
+INSERT INTO `clueless`.`weapon` (`weapon`) VALUES ('Revolver');
+
+
+INSERT INTO `clueless`.`suspect` (`suspect`) VALUES ('Colonel Mustard');
+INSERT INTO `clueless`.`suspect` (`suspect`) VALUES ('Miss Scarlet');
+INSERT INTO `clueless`.`suspect` (`suspect`) VALUES ('Professor Plum');
+INSERT INTO `clueless`.`suspect` (`suspect`) VALUES ('Mr. Green');
+INSERT INTO `clueless`.`suspect` (`suspect`) VALUES ('Mrs. White');
+
+INSERT INTO `clueless`.`room` (`room`) VALUES ('Study');
+INSERT INTO `clueless`.`room` (`room`) VALUES ('Hall');
+INSERT INTO `clueless`.`room` (`room`) VALUES ('Lounge');
+INSERT INTO `clueless`.`room` (`room`) VALUES ('Dining Room');
+INSERT INTO `clueless`.`room` (`room`) VALUES ('Kitchen');
+INSERT INTO `clueless`.`room` (`room`) VALUES ('Ballroom');
+INSERT INTO `clueless`.`room` (`room`) VALUES ('Conservatory');
+INSERT INTO `clueless`.`room` (`room`) VALUES ('Library');
+INSERT INTO `clueless`.`room` (`room`) VALUES ('Billard Room');
+
 
 

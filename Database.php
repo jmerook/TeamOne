@@ -83,8 +83,105 @@ class Database
       return $list;
   }
 
+  public function getWeaponCard($id)
+  {
+      //takes the $id, which is the random number used to create a secret envelope for a new game
+      $stmt = $this->pdo->prepare('SELECT * FROM clueless.weapon WHERE id = :id');
+
+      $stmt->execute(['id' => $id]);
+
+      if($stmt->rowCount() > 0)
+      {
+          $weapon = $stmt->fetch();
+
+
+          return $weapon['weapon'];
+
+      }
+      else
+      {
+
+          return 0;
+      }
+  }
+
+  public function getSuspectCard($id)
+  {
+      //takes the $id, which is the random number used to create a secret envelope for a new game
+
+      $stmt = $this->pdo->prepare('SELECT * FROM clueless.suspect WHERE id = :id');
+
+      $stmt->execute(['id' => $id]);
+
+      if($stmt->rowCount() > 0)
+      {
+          $suspect = $stmt->fetch();
+
+
+          return $suspect['suspect'];
+
+      }
+      else
+      {
+
+          return 0;
+      }
+  }
+
+
+  public function getRoomCard($id)
+  {
+    //takes the $id, which is the random number used to create a secret envelope for a new game
+
+      $stmt = $this->pdo->prepare('SELECT * FROM clueless.room WHERE id = :id');
+
+      $stmt->execute(['id' => $id]);
+
+      if($stmt->rowCount() > 0)
+      {
+          $room = $stmt->fetch();
+
+
+          return $room['room'];
+
+      }
+      else
+      {
+
+          return 0;
+      }
+  }
+
   public function createGame($gameName, $secretEnvelope)
   {
+        $db = new Database();
+
+      //random crime weapon card
+      $varWeaponNum = rand(1,6);
+      $weapon = $db->getWeaponCard($varWeaponNum);
+
+      //random suspect card
+      $varSuspectNum = rand(1,6);
+      $suspect = $db->getSuspectCard($varSuspectNum);
+
+
+      //random room card
+      $varRoomNum = rand(1,9);
+      $room = $db->getRoomCard($varRoomNum);
+
+      //insert card into card table
+      $db->createSecretCard($suspect, $weapon, $room);
+
+
+
+
+      //todo: get last id of the card inserted into the card table and use it to create the create card game
+
+
+      //todo:  use the query data below, and figure out how to get the last index to create the actual query to create
+      //a new game
+
+
       $stmt = $this->pdo->prepare('INSERT INTO clueless.game_board (gameName, secretEnvelope) VALUES (:gameName, :secretEnvelope)');
 
 
@@ -112,8 +209,6 @@ class Database
 
 
       $stmt->execute(['gameID' => $gameID, 'userID' => $userID]);
-
-
 
 
   }
