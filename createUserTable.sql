@@ -20,37 +20,41 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `user`
---
-
+--creat the user table
 CREATE TABLE `user` (
-  `id` int(10) NOT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `firstName` varchar(65) NOT NULL,
   `lastName` varchar(65) NOT NULL,
   `userName` varchar(65) NOT NULL,
-  `password` varchar(65) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `password` varchar(65) NOT NULL,
+  `game` int(11) DEFAULT NULL COMMENT 'this is the column to show what game the user is in',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userName` (`userName`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8
 
 
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `userName` (`userName`);
 
---
--- Dumping data for table `user`
---
 
-INSERT INTO `user` (`id`, `firstName`, `lastName`, `userName`, `password`) VALUES
-(0, 'Jacob', 'Merook', 'jmerook2', 'password'),
-(1, 'Jacob', 'Merook', 'jacobmerook@gmail.com', 'password'),
-(2, 'Jacob', 'Merook', 'jmerook1', 'password');
+--create the gameboard table
+CREATE TABLE `game_board` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Game ID',
+  `gameName` varchar(45) NOT NULL,
+  `secretEnvelope` varchar(45) NOT NULL COMMENT 'holds the FK to the secret envelope table to show which secret envelop goes with with game\n',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `secretEnvelop_UNIQUE` (`secretEnvelope`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8
 
---
--- Indexes for dumped tables
---
+
+
+
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (0,'Jacob','Merook','jmerook2','password',40);
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (1,'Jacob','Merook','jacobmerook@gmail.com','password',36);
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (2,'Jacob','Merook','jmerook1','password',36);
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (12,'Jacob','Merook','merook','password',36);
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (13,'Jacob','Merook','merook1','password',NULL);
+
+INSERT INTO `game_board` (`id`,`gameName`,`secretEnvelope`) VALUES (36,'test','50');
+INSERT INTO `game_board` (`id`,`gameName`,`secretEnvelope`) VALUES (40,'test1','2');
 
 
