@@ -1,0 +1,16 @@
+High
+- player movement / board functionality. (Jacob)
+- player suggestion functionality (Will)
+- program game ending functionality (who wins when, etc) (dexter)
+- player notification on moveent
+
+- Document, demo, walkthrough, etc (Kevin)
+
+
+Medium
+
+
+
+Low
+- FAQ (Mark)
+- joining a game form home.html

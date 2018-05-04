@@ -27,10 +27,14 @@ $_SESSION["userName"];
 $_GET['id'];
 
 
-//make a form, and have the player fill out what player they want to be, and to confirm
+//see how many players are in that game
+
+//if there are less than 6 then add the player to the game
 
 //call the DB object to add the user to the game (parameters need to be the game ID and the player ID)
 
 
-$db->addPlayerToGame();
+
+
+$db->addPlayerToGame($_SESSION["id"], $_GET['id']);
 

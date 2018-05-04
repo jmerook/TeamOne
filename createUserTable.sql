@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
---creat the user table
+--create the user table
 CREATE TABLE `user` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `firstName` varchar(65) NOT NULL,
