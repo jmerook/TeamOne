@@ -83,6 +83,28 @@ class Database
       return $list;
   }
 
+  public function getPlayersPerGame($gameID)
+  {
+      //pass a game ID in, and query to find out how many players are currently in the game
+      //return the number
+
+
+      $stmt = $this->pdo->prepare('select count(user.game)
+      from clueless.game_board
+        left join clueless.user on ( game_board.id = user.game )
+        where game_board.id = :id
+        group by game_board.gameName
+        order by game_board.id asc');
+
+      $stmt->execute(['id' => $gameID]);
+
+      $numPlayers = $stmt->fetch();
+
+
+      return $numPlayers['count(user.game)'];
+
+  }
+
   public function getWeaponCard($id)
   {
       //takes the $id, which is the random number used to create a secret envelope for a new game
@@ -152,7 +174,7 @@ class Database
       }
   }
 
-  public function createGame($gameName, $secretEnvelope)
+  public function createGame($gameName)
   {
         $db = new Database();
 
@@ -170,16 +192,13 @@ class Database
       $room = $db->getRoomCard($varRoomNum);
 
       //insert card into card table
-      $db->createSecretCard($suspect, $weapon, $room);
+      $db->createEnvelope($suspect, $weapon, $room);
 
 
 
 
       //todo: get last id of the card inserted into the card table and use it to create the create card game
-
-
-      //todo:  use the query data below, and figure out how to get the last index to create the actual query to create
-      //a new game
+      $secretEnvelope = $db->getLastCreatedSecretEnvelope();
 
 
       $stmt = $this->pdo->prepare('INSERT INTO clueless.game_board (gameName, secretEnvelope) VALUES (:gameName, :secretEnvelope)');
@@ -191,6 +210,18 @@ class Database
 
   }
 
+
+  public function createEnvelope($suspect, $weapon, $room)
+  {
+
+      $stmt = $this->pdo->prepare('INSERT INTO clueless.envelope (suspect, weapon, room) VALUES (:suspect, :weapon, :room)');
+
+
+      $stmt->execute(['suspect' => $suspect, 'weapon' => $weapon, 'room' => $room]);
+
+  }
+
+
   public function getLastCreatedGame()
   {
 
@@ -200,6 +231,20 @@ class Database
 
       return $gameID;
   }
+
+  public function getLastCreatedSecretEnvelope()
+  {
+
+      $stmt = $this->pdo->query('select id from clueless.envelope order by id desc limit 1;');
+
+      $envelopeID = $stmt->fetch();
+
+      //print_r($envelopeID);
+      //return $envelopeID;
+      return $envelopeID['id'];
+
+  }
+
 
   public function addPlayerToGame($userID, $gameID)
   {

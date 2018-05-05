@@ -24,7 +24,7 @@ ini_set('display_errors',"1");
 
 $db = new Database();
 
-$db->createGame($_POST["gameName"],24);
+$db->createGame($_POST["gameName"]);
 
 $lastGameCreated = $db->getLastCreatedGame();
 

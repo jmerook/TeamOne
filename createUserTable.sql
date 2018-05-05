@@ -67,7 +67,22 @@ CREATE TABLE `clueless`.`room` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
+CREATE TABLE `clueless`.`envelope` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `suspect` VARCHAR(45) NOT NULL,
+  `room` VARCHAR(45) NOT NULL,
+  `weapon` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
+CREATE TABLE `game_map` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'this will be the pointer, and how we reference the row ',
+  `row` varchar(45) NOT NULL COMMENT 'row fo the game board',
+  `column` varchar(45) NOT NULL COMMENT 'column of the game board',
+  `name` varchar(45) NOT NULL COMMENT 'name of the room (or hallway) of the position on the game board\n',
+  `occupant` varchar(45) DEFAULT NULL COMMENT 'this will be updated each turn when a user moves in or out of the location',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8
 
 
 
@@ -104,6 +119,30 @@ INSERT INTO `clueless`.`room` (`room`) VALUES ('Ballroom');
 INSERT INTO `clueless`.`room` (`room`) VALUES ('Conservatory');
 INSERT INTO `clueless`.`room` (`room`) VALUES ('Library');
 INSERT INTO `clueless`.`room` (`room`) VALUES ('Billard Room');
+
+
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('1', '1', 'Study');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('1', '2', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('1', '3', 'Hall');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('1', '4', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('1', '5', 'Lounge');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('2', '1', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('2', '3', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('2', '5', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('3', '1', 'Library');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('3', '2', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('3', '3', 'Billard Room');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('3', '4', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('3', '5', 'Dining Room');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('4', '1', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('4', '3', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('4', '5', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('5', '1', 'Conservatory');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('5', '2', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('5', '3', 'Ballroom');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('5', '4', 'hallway');
+INSERT INTO `clueless`.`game_map` (`row`, `column`, `name`) VALUES ('5', '5', 'Kitchen');
+
 
 
 

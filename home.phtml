@@ -109,22 +109,35 @@ if( isset($_SESSION["userName"]) <> 1 )
 
 
         //    print_r($list);
-        $i = 0;
+        //$i = 0;
         foreach ($list as $item)
         {
-            //echo "<li>" . $item->getUserName() . "</li>";
+
+            $id = $item->getID();
+            $numPlayers = $db->getPlayersPerGame($id);
 
 
             echo "<tr>";
                 echo "<th>" . $item->getName(). "</th>";
-                echo "<td>" . "$i out of 6" . "</td>";
+                echo "<td>" . "$numPlayers out of 6" . "</td>";
                 echo "<td>" . "yes" . "</td>";
                     //echo "<a class='btn btn-outline-primary' href='#' role='button'>" . "Join Game" . "</a>";
+                //TODO IF number of people in the game is less than 6, allow them to show it.. else show the same button but add a disabled tag
+            if($numPlayers < 6)
+            {
                 echo "<td><a class='btn btn-outline-primary' href='joinGame.phtml?id=".$item->getID()."'>" . "Join Game" . "</a></td>";
+            }
+            else
+            {
+                //echo "<td><a class='btn btn-outline-primary' href=''>" . "Join Game" . "</a></td>";
+                echo "<td></td>";
+            }
+
+
 
             echo "</tr>";
 
-            $i++;
+            //$i++;
         }
 
         ?>
