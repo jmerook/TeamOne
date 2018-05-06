@@ -317,6 +317,17 @@ class Database
     }
 
 
+    public function getLastPlayerInGame($gameID)
+    {
+        $stmt = $this->pdo->prepare('select * from clueless.user where game = :gameID order by characterNumber desc  limit 1');
+
+        $stmt->execute(['gameID' => $gameID]);
+        $gameID = $stmt->fetch();
+
+        return $gameID['characterNumber'];
+    }
+
+
     public function addPlayerToGame($userID, $gameID, $characterNumber)
     {
         $stmt = $this->pdo->prepare('UPDATE clueless.user SET game = :gameID, characterNumber = :characterNumber WHERE id = :userID');

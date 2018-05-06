@@ -23,7 +23,7 @@ if( isset($_SESSION["userName"]) <> 1 )
 $_SESSION["userName"];
 
 
-//get the query string for the game that you wnat to add the player to
+//get the query string for the game that you wantt to add the player to
 $_GET['id'];
 
 
@@ -36,12 +36,21 @@ $_GET['id'];
 
 //TODO get the game that the player is trying to join
 
-//TODO find out which characters haven't been assigned uet
 
+//TODO find out which characters haven't been assigned yet
+$lastPlayer = $db->getLastPlayerInGame($_GET['id']);
+
+
+//print_r($lastPlayer);
 //todo assign character
+$characterNumber = $lastPlayer + 1;
+
+$db->addPlayerToGame($_SESSION["id"], $_GET['id'], $characterNumber);
 
 
-$db->addPlayerToGame($_SESSION["id"], $_GET['id']);
+
+
+//$db->addPlayerToGame($_SESSION["id"], $_GET['id']);
 
 
 //TODO: should this go to the direct game page?
