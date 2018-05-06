@@ -34,25 +34,14 @@ $_GET['id'];
 //call the DB object to add the user to the game (parameters need to be the game ID and the player ID)
 
 
-//TODO get the game that the player is trying to join
+//get the game that the player is trying to join and assign a character reference, update tables
 
-
-//TODO find out which characters haven't been assigned yet
 $lastPlayer = $db->getLastPlayerInGame($_GET['id']);
 
-
-//print_r($lastPlayer);
-//todo assign character
 $characterNumber = $lastPlayer + 1;
 
 $db->addPlayerToGame($_SESSION["id"], $_GET['id'], $characterNumber);
 
 
-
-
-//$db->addPlayerToGame($_SESSION["id"], $_GET['id']);
-
-
-//TODO: should this go to the direct game page?
 header('Location: ./home.phtml');
 

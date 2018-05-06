@@ -63,13 +63,15 @@ class Database
 
     }
 
-    public function getCurrentGames()
+    public function getCurrentGames($userID)
     {
 
-        //get all available games
-        $stmt = $this->pdo->query('SELECT * FROM clueless.game_board');
+        //get games that I am assigned to
 
-        //$stmt->execute();
+        $stmt = $this->pdo->prepare('select user.game, game_board.gameName, game_board.secretEnvelope, game_board.id from clueless.user join clueless.game_board on game_board.id = user.game where user.id = :userID');
+
+        $stmt->execute(['userID' => $userID]);
+
         $list = array();
 
         while ($game = $stmt->fetch())

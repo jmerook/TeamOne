@@ -54,7 +54,7 @@ if( isset($_SESSION["userName"]) <> 1 )
             <th scope="col">User Name</th>
             <th scope="col">First name</th>
             <th scope="col">Last Name</th>
-            <th scope="col">Action</th>
+
         </tr>
         </thead>
         <tbody>
@@ -78,7 +78,7 @@ if( isset($_SESSION["userName"]) <> 1 )
             echo "<th>" . $item->getUserName() . "</th>";
             echo "<td>" . $item->getFirstName() . "</td>";
             echo "<td>" . $item->getLastName() . "</td>";
-            echo "<td>" . $item->getID() . "</td>";
+            
             echo "</tr>";
 
         $i++;
@@ -96,7 +96,6 @@ if( isset($_SESSION["userName"]) <> 1 )
         <tr>
             <th scope="col">Game #</th>
             <th scope="col"># players</th>
-            <th scope="col">open to join?</th>
             <th scope="col">Action</th>
         </tr>
         </thead>
@@ -105,10 +104,10 @@ if( isset($_SESSION["userName"]) <> 1 )
         $db = new Database();
 
         //returns a list of available players
-        $list = $db->getCurrentGames();
+        $list = $db->getCurrentGames($_SESSION["id"]);
 
 
-        //    print_r($list);
+
         //$i = 0;
         foreach ($list as $item)
         {
@@ -121,25 +120,18 @@ if( isset($_SESSION["userName"]) <> 1 )
                 echo "<th>" . $item->getName(). "</th>";
                 echo "<td>" . "$numPlayers out of 6" . "</td>";
 
-                if($numPlayers < 6)
-                {   //let the player know if they can or can't join the game based on how many people are in the game
-                    echo "<td>" . "yes" . "</td>";
-                }
-                else
-                {
-                    echo "<td>" . "no" . "</td>";
-                }
-                    //echo "<a class='btn btn-outline-primary' href='#' role='button'>" . "Join Game" . "</a>";
 
             $playersGameID = $db->getPlayersGameID($_SESSION["id"]);
 
 
+            /*
             if($numPlayers < 6 && (!($playersGameID == $item->getID())))
             {
                 echo "<td><a class='btn btn-outline-primary' href='joinGame.phtml?id=".$item->getID()."'>" . "Join Game" . "</a></td>";
             }
+            */
 
-            elseif($playersGameID == $item->getID())
+            if($playersGameID == $item->getID())
             {
                 //if the player is currently in that game, then show a yellow "enter game" button that takes them
                 //to the game_board page for that specific game
@@ -149,10 +141,12 @@ if( isset($_SESSION["userName"]) <> 1 )
                 echo "<td><a class='btn btn-outline-success' href='game_board.phtml'>" . "Go to Game" . "</a></td>";
 
             }
+            /*
             else
             {
                 echo "<td><a class='btn btn-outline-danger disabled' href='joinGame.phtml?id=".$item->getID()."'>" . "Game is Full" . "</a></td>";
             }
+            */
 
 
 
