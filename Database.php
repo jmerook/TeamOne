@@ -236,6 +236,10 @@ class Database
         $db->initiateGameMap($lastGameID);
 
 
+        //get all players in the game for that game instance, and assign their character to their static starting place
+        //on the game map. ex prof. plum always starts in the bottom right hallway position (5,2).
+        //so, set the occupant for position 5,2 to be prof plum.
+
 
 
 
@@ -283,6 +287,31 @@ class Database
         $stmt->execute(['rowNumber' => '5', 'columnNumber' => '3', 'roomName' => 'Ballroom', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '5', 'columnNumber' => '4', 'roomName' => 'hallway', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '5', 'columnNumber' => '5', 'roomName' => 'Kitchen', 'game_board' => $id]);
+
+
+
+        $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET occupant = :occupant WHERE game_board = :id and rowNumber = :rowNumber and columnNumber = :columnNumber');
+        //UPDATE clueless.game_map SET occupant='3' WHERE game_board = :$id and rowNumber = 5 and columnNumber = 2
+
+
+        //set Cl. Mustard's starting spot
+        $stmt->execute(['occupant' => 1, 'id' => $id, 'rowNumber' => '1', 'columnNumber' => '2']);
+
+        //set Miss. Scarlett's starting spot
+        $stmt->execute(['occupant' => 2, 'rowNumber' => '2', 'columnNumber' => '1', 'id' => $id]);
+
+        //set Professor Plum's starting spot
+        $stmt->execute(['occupant' => 3, 'rowNumber' => '5', 'columnNumber' => '2', 'id' => $id]);
+
+        //set Mr. Green's starting spot
+        $stmt->execute(['occupant' => 4, 'rowNumber' => '4', 'columnNumber' => '5', 'id' => $id]);
+
+        //set Mrs. White's starting position
+        $stmt->execute(['occupant' => 5, 'rowNumber' => '2', 'columnNumber' => '5', 'id' => $id]);
+
+        //set Ms. Peacock's starting spot
+        $stmt->execute(['occupant' => 6, 'rowNumber' => '5', 'columnNumber' => '4', 'id' => $id]);
+
     }
 
 
