@@ -1,0 +1,222 @@
+<?php
+
+session_start();
+include "Database.php";
+include "User.php";
+include "Game.php";
+
+//check to see if the session is set, if not the redirect them back to the
+//login page. they should not be able to access this page unless they are logged in
+//or else it will break the game since it requires session variables such as username to
+//populate the screen.
+
+//if the session variable is NOT set, then send them back
+if( isset($_SESSION["userName"]) <> 1 )
+{
+    header('Location: ./index.phtml');
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+
+    <title>Clue-less!</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="./css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./css/grid.css" rel="stylesheet">
+    <script src="./js/bootstrap.js"> </script>
+    <script src="./js/bootstrap.js"> </script>
+
+</head>
+
+<body>
+<div class="container">
+    <h1>this is the game screen</h1>
+
+
+
+
+
+    <?php
+
+    //todo: check to see if the users has been assigned a character or weapon, need to set this before
+
+
+
+
+    //todo: call function to determine what moves the user can make
+    //todo: send back results in a table.
+    //todo: loop through result set and make a dropdown with the availbale moves. (needs to be in a form)
+    //todo: after the user selects an option, they will need to click the submit button
+    //todo: in the php file, validate that noone is currently in that spot. if so - handle the failure,
+    //todo: if valid, process the payload and then redirect them to the gameboard.
+
+
+    ?>
+    <div class="container">
+        <form>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label" for="inlineRadio1">Where would you like to move?:</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+            <div class="form-check form-check-inline">
+                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </div>
+
+        </form>
+
+
+        <hr>
+
+        <!-- this will need to be generated dynamically by PHP-->
+        <div class="row">
+            <div class="col-2">Library
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2">Billiard Room
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2">Dining Room
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: white; border: none"></div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: white; border: none"></div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">Library
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2">Billiard Room
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2">Dining Room
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: white; border: none"></div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: white; border: none"></div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">Conservatory
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2">Ballroom
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2" style="background: #adb5bd">Hallway
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+            <div class="col-2">Kitchen
+                <div class="row">
+                    <div class="col-md-6">player</div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+

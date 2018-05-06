@@ -20,7 +20,6 @@ ini_set('display_errors',"1");
 
 //create a new game with the name that was supplied. the ID will auto increment
 
-//print_r($_POST["gameName"]);
 
 $db = new Database();
 
@@ -31,17 +30,26 @@ $lastGameCreated = $db->getLastCreatedGame();
 
 //TODO: insert validation to make sure there are no more than 6 people selected
 
+$i = 1;
 foreach ($_POST['playerSelect'] as $selectedOption)
 {
 
     //call the update method on user to set the game field to the game id that was just created
     // sort the game table by id DESC to get the ID, and add that as a dynamic variable below
 
-    $db->addPlayerToGame($selectedOption, $lastGameCreated["id"]);
+
+    //get the characters to assign to the players. business rule based on time: the players are randomly
+    //assigned - future version would allow the users to pick which characters they want.
+
+    $characterNumber = $db->getSuspectCard($id);
 
 
+    //$db->addPlayerToGame($selectedOption, $lastGameCreated["id"]);
+    $db->addPlayerToGame($selectedOption, $lastGameCreated);
+
+
+    $i = $i + 1;
 }
-
 
 //direct the page to the game board page to start the game
 
@@ -50,6 +58,7 @@ foreach ($_POST['playerSelect'] as $selectedOption)
 
 
 
-
+//take the user to the game board page for the appropriate game
+header('Location: ./game_board.phtml');
 
 

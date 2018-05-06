@@ -38,3 +38,7 @@ $_GET['id'];
 
 $db->addPlayerToGame($_SESSION["id"], $_GET['id']);
 
+
+//TODO: should this go to the direct game page?
+header('Location: ./home.phtml');
+
