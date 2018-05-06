@@ -150,6 +150,29 @@ class Database
         }
     }
 
+    public function getSuspectCardID($id)
+    {
+        //takes the $id, which is the random number used to create a secret envelope for a new game
+
+        $stmt = $this->pdo->prepare('SELECT * FROM clueless.suspect WHERE id = :id');
+
+        $stmt->execute(['id' => $id]);
+
+        if($stmt->rowCount() > 0)
+        {
+            $suspect = $stmt->fetch();
+
+
+            return $suspect['id'];
+
+        }
+        else
+        {
+
+            return 0;
+        }
+    }
+
 
     public function getRoomCard($id)
     {

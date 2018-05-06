@@ -28,8 +28,6 @@ $db->createGame($_POST["gameName"]);
 $lastGameCreated = $db->getLastCreatedGame();
 
 
-//TODO: insert validation to make sure there are no more than 6 people selected
-
 $i = 1;
 foreach ($_POST['playerSelect'] as $selectedOption)
 {
@@ -41,11 +39,11 @@ foreach ($_POST['playerSelect'] as $selectedOption)
     //get the characters to assign to the players. business rule based on time: the players are randomly
     //assigned - future version would allow the users to pick which characters they want.
 
-    $characterNumber = $db->getSuspectCard($id);
+    $characterNumber = $db->getSuspectCardID($id);
 
 
     //$db->addPlayerToGame($selectedOption, $lastGameCreated["id"]);
-    $db->addPlayerToGame($selectedOption, $lastGameCreated);
+    $db->addPlayerToGame($selectedOption, $lastGameCreated, $characterNumber);
 
 
     $i = $i + 1;
