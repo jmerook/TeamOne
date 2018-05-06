@@ -317,14 +317,12 @@ class Database
     }
 
 
-    public function addPlayerToGame($userID, $gameID)
+    public function addPlayerToGame($userID, $gameID, $characterNumber)
     {
-        //$stmt = $this->pdo->prepare('SELECT * FROM clueless.user WHERE userName = :userName AND password=:password');
-        $stmt = $this->pdo->prepare('UPDATE clueless.user SET game = :gameID WHERE id = :userID');
-        //UPDATE `clueless`.`user` SET `game`='2' WHERE `id`='0';
+        $stmt = $this->pdo->prepare('UPDATE clueless.user SET game = :gameID, characterNumber = :characterNumber WHERE id = :userID');
 
 
-        $stmt->execute(['gameID' => $gameID, 'userID' => $userID]);
+        $stmt->execute(['gameID' => $gameID, 'userID' => $userID, 'characterNumber' => $characterNumber]);
 
 
     }

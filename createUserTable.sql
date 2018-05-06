@@ -28,7 +28,7 @@ CREATE TABLE `user` (
   `userName` varchar(65) NOT NULL,
   `password` varchar(65) NOT NULL,
   `game` int(11) DEFAULT NULL COMMENT 'this is the column to show what game the user is in',
-  `character` varchar(45) DEFAULT NULL COMMENT 'this is the character they are playing in the game instance',
+  `characterNumber` int(11) DEFAULT NULL COMMENT 'this is the character they are playing in the game instance',
   PRIMARY KEY (`id`),
   UNIQUE KEY `userName` (`userName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
