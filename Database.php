@@ -152,6 +152,7 @@ class Database
         }
     }
 
+
     public function getSuspectCardID($id)
     {
         //takes the $id, which is the random number used to create a secret envelope for a new game
@@ -314,6 +315,19 @@ class Database
 
     }
 
+    public function getRowItems($gameBoard, $gameBoardRow, $gameBoardColumn)
+    {
+        //get the data for the row that is given the gameBoard instance number and the row number itself
+
+        $stmt = $this->pdo->prepare('select * from clueless.game_map where game_board = :gameBoard and rowNumber = :gameBoardRow and columnNumber = :gameBoardColumn');
+        //select * from clueless.game_map where game_board = 70 and rowNumber = 2;
+
+        $stmt->execute(['gameBoard' => $gameBoard, 'gameBoardRow' => $gameBoardRow, 'gameBoardColumn' => $gameBoardColumn]);
+        $row = $stmt->fetch();
+
+        return $row;
+    }
+
 
     public function createEnvelope($suspect, $weapon, $room)
     {
@@ -396,4 +410,6 @@ class Database
             return 0;
         }
     }
+
+
 }

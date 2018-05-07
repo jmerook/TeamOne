@@ -64,6 +64,11 @@ if( isset($_SESSION["userName"]) <> 1 )
 
     ?>
     <div class="container">
+
+
+        <!-- TODO; send this to a page to call a function to validate and update the DB for the user's movement -->
+
+
         <form>
             <div class="form-check form-check-inline">
                 <label class="form-check-label" for="inlineRadio1">Where would you like to move?:</label>
@@ -87,8 +92,86 @@ if( isset($_SESSION["userName"]) <> 1 )
 
         <hr>
 
+
+        <?php
+
+        $db = new Database();
+
+
+
+        //this for loop with generate the game board
+        $row = '';
+        $column = '';
+
+
+
+        for($row=1; $row<=5; $row++)
+        {
+            //start the row
+            echo "<div class='row'>";
+
+            //build the table by row,
+            for($column = 1; $column <=5; $column++)
+            {
+                //account for row 2 and 4 that only have 3 columns (1,3,5)
+                if($row == 2 || $row == 4)
+                {
+                    //increase the column numbers 1, 3, 5
+                    if($column == 2 || $column == 4)
+                    {
+                        $rowObj = $db->getRowItems($_GET['id'],$row, ($column + 1));
+                    }
+                    else
+                    {
+                        $rowObj = $db->getRowItems($_GET['id'],$row, $column);
+                    }
+                }
+
+                $rowObj = $db->getRowItems($_GET['id'],$row, $column);
+
+                //this is where you want to assemble the table
+
+                //change the color of the tile if it is a hallway
+                if($rowObj["roomName"] == 'hallway')
+                {
+                    //echo "<div class='col-2' style='background: white; border: none'></div>";
+                    echo "<div class='col-2' style='background: #adb5bd'>" . $rowObj["roomName"];
+                }
+
+                else
+                {
+                    if(isset($rowObj["roomName"]))
+                    {
+                        echo "<div class='col-2'>" . $rowObj["roomName"];
+                    }
+                    else
+                    {
+                        //echo "<div class='col-2'>" . $rowObj["roomName"];
+                        //echo "<div class='col-2'>" . "IS NOT SET";
+                        echo "<div class='col-2' style='background: white'>";
+                    }
+
+                }
+                //echo "<div class='col-2'>" . $rowObj["roomName"];
+                    echo "<div class='row'>";
+                    //display whether there is someone in the room/hallway
+                    if($rowObj['occupant'] <> null)
+                    {
+                        //get the username & character name of the person in that square
+                        //TODO add the username of the user that is the character
+                        $suspectName = $db->getSuspectCard($rowObj['occupant']);
+                        echo "<div class='col-md-6'>" . $suspectName. "</div>";
+                    }
+                    echo "</div>";
+                echo "</div>";
+
+            }
+            echo "</div>";
+        }
+
+        ?>
         <!-- this will need to be generated dynamically by PHP-->
-        <div class="row">
+        <!--<div class="row">
             <div class="col-2">Library
                 <div class="row">
                     <div class="col-md-6">player</div>
@@ -210,6 +293,7 @@ if( isset($_SESSION["userName"]) <> 1 )
                 </div>
             </div>
         </div>
+        -->
     </div> <!-- /container -->
 
     <!-- Bootstrap core JavaScript
