@@ -98,21 +98,11 @@ if( isset($_SESSION["userName"]) <> 1 )
 
           echo "</tbody>";
         echo "</table>";
-
-        //todo if it isn't my turn currently, dont display the movement options. (put something on the screen
-        // like "when it is your turn, the movement options will show up.
         ?>
-
-
-
-
 
     <?php
 
     //todo: check to see if the users has been assigned a character or weapon, need to set this before
-
-
-
 
     //todo: call function to determine what moves the user can make
     //todo: send back results in a table.
@@ -121,8 +111,16 @@ if( isset($_SESSION["userName"]) <> 1 )
     //todo: in the php file, validate that noone is currently in that spot. if so - handle the failure,
     //todo: if valid, process the payload and then redirect them to the gameboard.
 
+    //if($_SESSION["userName"] == $db->getCurrentPlayer($_GET['id']) )
+    //{
+        //if it is persons session's turn - display the movement options. else dont show it.
 
+    //}
     ?>
+
+    <?php if($_SESSION["id"] == $db->getCurrentPlayer($_GET['id'])){ ?>
+
+
     <div class="container">
 
 
@@ -177,7 +175,7 @@ if( isset($_SESSION["userName"]) <> 1 )
             </div>
 
         </form>
-
+        <?php } ?>
 
         <hr>
 

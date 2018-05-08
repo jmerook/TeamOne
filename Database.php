@@ -217,6 +217,17 @@ class Database
         }
     }
 
+    public function getCurrentPlayer($gameID)
+    {
+        //get the current player id for the game instance
+        $stmt = $this->pdo->prepare('select * from clueless.user where game = :game and isTurn = 1');
+
+        $stmt->execute(['game' => $gameID]);
+
+        $user = $stmt->fetch();
+        return $user['id'];
+    }
+
 
     public function getRoomCard($id)
     {
