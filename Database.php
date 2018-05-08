@@ -271,18 +271,10 @@ class Database
         $stmt->execute(['gameName' => $gameName, 'secretEnvelope' => $secretEnvelope]);
 
 
-        //TODO get the last game ID created and then make method to create game_map table entries for that board by using that ID
 
         $lastGameID = $db->getLastCreatedGame();
 
         $db->initiateGameMap($lastGameID);
-
-
-
-        //get all players in the game for that game instance, and assign their character to their static starting place
-        //on the game map. ex prof. plum always starts in the bottom right hallway position (5,2).
-        //so, set the occupant for position 5,2 to be prof plum.
-
 
 
 

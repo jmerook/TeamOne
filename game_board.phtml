@@ -60,6 +60,7 @@ if( isset($_SESSION["userName"]) <> 1 )
               echo "<th scope='col'>Play Order</th>";
               echo "<th scope='col'>Username</th>";
               echo "<th scope='col'>First Name</th>";
+              echo "<th scope='col'>Character</th>";
               echo "<th scope='col'>Turn</th>";
             echo "</tr>";
           echo "</thead>";
@@ -77,6 +78,8 @@ if( isset($_SESSION["userName"]) <> 1 )
                 echo "<th scope='row'>" . $user['characterNumber'] . "</th>";
                 echo "<td>" . $user['userName'] . "</td>";
                 echo "<td>" . $user['firstName'] . "</td>";
+                //call the get character name here and set it
+                echo "<td>" . $db->getSuspectCard($user['characterNumber']) . "</td>";
 
                 if($user['isTurn'] == 1)
                 {
@@ -96,7 +99,6 @@ if( isset($_SESSION["userName"]) <> 1 )
           echo "</tbody>";
         echo "</table>";
 
-        //TODO display the current people in the game, and whose turn it currently is, and in the order that the players move.
         //todo if it isn't my turn currently, dont display the movement options. (put something on the screen
         // like "when it is your turn, the movement options will show up.
         ?>
@@ -131,14 +133,43 @@ if( isset($_SESSION["userName"]) <> 1 )
             <div class="form-check form-check-inline">
                 <label class="form-check-label" for="inlineRadio1">Where would you like to move?:</label>
             </div>
-
             <div class="form-check form-check-inline">
                 <select class="form-control" id="exampleFormControlSelect1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                    <option>move</option>
+                    <option>move</option>
+                    <option>move</option>
+                    <option>move</option>
+                    <option>move</option>
+                </select>
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label" for="inlineRadio1">Would you like to make a suggestion?:</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>suspect</option>
+                    <option>suspect</option>
+                    <option>suspect</option>
+                    <option>suspect</option>
+                    <option>suspect</option>
+                </select>
+            </div>
+            <div class="form-check form-check-inline">
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>weapon</option>
+                    <option>weapon</option>
+                    <option>weapon</option>
+                    <option>weapon</option>
+                    <option>weapon</option>
+                </select>
+            </div>
+            <div class="form-check form-check-inline">
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>room</option>
+                    <option>room</option>
+                    <option>room</option>
+                    <option>room</option>
+                    <option>room</option>
                 </select>
             </div>
             <div class="form-check form-check-inline">
