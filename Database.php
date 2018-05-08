@@ -277,8 +277,6 @@ class Database
 
         $db->initiateGameMap($lastGameID);
 
-        //set the first player of the game (first character) to be their turn to start the game.
-        $db->setInitialGameTurn($lastGameID);
 
 
         //get all players in the game for that game instance, and assign their character to their static starting place
@@ -293,9 +291,22 @@ class Database
 
     public function setInitialGameTurn($gameID)
     {
+
         //get the first player (first character) and set their isTurn field to 1 for the game instance
-        $stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn=:isTurn WHERE id=:gameID');
-        $stmt->execute(['isTurn' => "1", 'gameID' => $gameID]);
+
+
+        //$stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn = 1 WHERE game = :gameID AND characterNumber = 1');
+        //$stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn= 1 WHERE game=:gameID AND characterNumber = 1;');
+        //UPDATE `clueless`.`user` SET `isTurn`='1' WHERE `game`='84' AND 'characterNumber' = '1';
+
+        $stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn = :isTurn WHERE game = :gameID AND characterNumber = :characterNumber');
+
+
+        //is the players even added to this yet?
+        //if this doesnt work, try updating on the users ID which is in the session variable
+        $stmt->execute(['isTurn' => '1', 'gameID' => $gameID, 'characterNumber' => '1']);
+
+
 
     }
 

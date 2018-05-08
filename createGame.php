@@ -53,12 +53,14 @@ foreach ($_POST['playerSelect'] as $selectedOption)
 
 //direct the page to the game board page to start the game
 
+//set the first player of the game (first character) to be their turn to start the game.
+$db->setInitialGameTurn($lastGameCreated);
 
 
 
 
 
 //take the user to the game board page for the appropriate game
-header('Location: ./game_board.phtml');
+header('Location: ./game_board.phtml?id=' . $lastGameCreated);
 
 
