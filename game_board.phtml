@@ -1,5 +1,6 @@
 <?php
 
+ini_set('display_errors',"1");
 session_start();
 include "Database.php";
 include "User.php";
@@ -41,7 +42,64 @@ if( isset($_SESSION["userName"]) <> 1 )
 
 <body>
 <div class="container">
-    <h1>this is the game screen</h1>
+
+    <!-- <h1>this is the game screen</h1>  -->
+    <?php
+        $db = new Database();
+        $gameName = $db->getGameName($_GET['id']);
+
+        echo "<h1>Welcome to Game: " . $gameName . ", " . $_SESSION["userName"] . "!</h1>";
+
+        echo"<h3>People playing the game: </h3>";
+
+
+        echo "<table class='table'>";
+          echo "<thead>";
+
+            echo "<tr>";
+              echo "<th scope='col'>Play Order</th>";
+              echo "<th scope='col'>Username</th>";
+              echo "<th scope='col'>First Name</th>";
+              echo "<th scope='col'>Turn</th>";
+            echo "</tr>";
+          echo "</thead>";
+          echo "<tbody>";
+
+          $list = $db->getPlayersFromGame($_GET['id']);
+
+;
+
+          $i = '';
+          $i = 0;
+          foreach ($list as $user)
+          {
+            echo "<tr>";
+                echo "<th scope='row'>" . $user['characterNumber'] . "</th>";
+                echo "<td>" . $user['userName'] . "</td>";
+                echo "<td>" . $user['firstName'] . "</td>";
+
+                if($user['isTurn'] == 1)
+                {
+                    echo "<td>yes</td>";
+                }
+                else
+                {
+                    echo "<td></td>";
+                }
+
+                echo "</tr>";
+
+                $i++;
+          }
+
+
+          echo "</tbody>";
+        echo "</table>";
+
+        //TODO display the current people in the game, and whose turn it currently is, and in the order that the players move.
+        //todo if it isn't my turn currently, dont display the movement options. (put something on the screen
+        // like "when it is your turn, the movement options will show up.
+        ?>
 
 
 
@@ -68,7 +126,7 @@ if( isset($_SESSION["userName"]) <> 1 )
 
         <!-- TODO; send this to a page to call a function to validate and update the DB for the user's movement -->
 
-
+        <hr/>
         <form>
             <div class="form-check form-check-inline">
                 <label class="form-check-label" for="inlineRadio1">Where would you like to move?:</label>

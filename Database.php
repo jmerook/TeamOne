@@ -85,6 +85,47 @@ class Database
         return $list;
     }
 
+    public function getGameName($gameID)
+    {
+        //given the game ID, return the name of the game instance
+
+        $stmt = $this->pdo->prepare('SELECT gameName FROM clueless.game_board WHERE id = :id');
+
+        $stmt->execute(['id' => $gameID]);
+
+        $game = $stmt->fetch();
+
+
+            return $game['gameName'];
+    }
+
+
+    public function getPlayersFromGame($gameID)
+    {
+        //return the user objects of those that are in this game instance
+        $stmt = $this->pdo->prepare('select * from clueless.user where game = :gameID order by characterNumber asc;');
+
+        $stmt->execute(['gameID' => $gameID]);
+
+        $list = array();
+
+
+        while ($user = $stmt->fetch())
+
+        {
+
+            //$obj = new User($user['userName'], $user['firstName'], $user['lastName'], $user['password'], $user['id']);
+            array_push($list,$user);
+
+        }
+
+
+
+        return $list;
+
+
+        return $numPlayers['count(user.game)'];
+    }
     public function getPlayersPerGame($gameID)
     {
         //pass a game ID in, and query to find out how many players are currently in the game
@@ -236,6 +277,9 @@ class Database
 
         $db->initiateGameMap($lastGameID);
 
+        //set the first player of the game (first character) to be their turn to start the game.
+        $db->setInitialGameTurn($lastGameID);
+
 
         //get all players in the game for that game instance, and assign their character to their static starting place
         //on the game map. ex prof. plum always starts in the bottom right hallway position (5,2).
@@ -245,6 +289,19 @@ class Database
 
 
 
+    }
+
+    public function setInitialGameTurn($gameID)
+    {
+        //get the first player (first character) and set their isTurn field to 1 for the game instance
+        $stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn=:isTurn WHERE id=:gameID');
+        $stmt->execute(['isTurn' => "1", 'gameID' => $gameID]);
+
+    }
+
+    public function updateGameTurnToNextPlayer()
+    {
+        //set the current players isTurn flag to 0, and get character #2 and set their isTurn to 1
     }
 
 
