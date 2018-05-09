@@ -110,12 +110,6 @@ if( isset($_SESSION["userName"]) <> 1 )
     //todo: after the user selects an option, they will need to click the submit button
     //todo: in the php file, validate that noone is currently in that spot. if so - handle the failure,
     //todo: if valid, process the payload and then redirect them to the gameboard.
-
-    //if($_SESSION["userName"] == $db->getCurrentPlayer($_GET['id']) )
-    //{
-        //if it is persons session's turn - display the movement options. else dont show it.
-
-    //}
     ?>
 
     <?php if($_SESSION["id"] == $db->getCurrentPlayer($_GET['id'])){ ?>
@@ -127,51 +121,84 @@ if( isset($_SESSION["userName"]) <> 1 )
         <!-- TODO; send this to a page to call a function to validate and update the DB for the user's movement -->
 
         <hr/>
-        <form>
+
+
+        <form action="playerMoves.php" method="POST">
             <div class="form-check form-check-inline">
                 <label class="form-check-label" for="inlineRadio1">Where would you like to move?:</label>
             </div>
             <div class="form-check form-check-inline">
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>move</option>
-                    <option>move</option>
-                    <option>move</option>
-                    <option>move</option>
-                    <option>move</option>
+                <select class="form-control" id="exampleFormControlSelect1" name="move">
+                <?php
+                //get the current position of the player to determine wher they can move on the board
+                $currentPosition = $db->getPlayersBoardPosition($_SESSION["id"], $_GET['id']);
+
+                //pass the current position into the method to get back a list of rows the player can move to
+                //echo "<pre>";
+                //print_r($currentPosition['roomName']);
+                //echo "<pre>";
+
+                if( $currentPosition['roomName'] == 'Study' ||
+                    $currentPosition['roomName'] == 'Hall' ||
+                    $currentPosition['roomName'] == 'Lounge' ||
+                    $currentPosition['roomName'] == 'Dining Room' ||
+                    $currentPosition['roomName'] == 'Kitchen' ||
+                    $currentPosition['roomName'] == 'Ballroom' ||
+                    $currentPosition['roomName'] == 'Conservatory' ||
+                    $currentPosition['roomName'] == 'Library' ||
+                    $currentPosition['roomName'] == 'Billard Room')
+                {
+                    //they player is currently in a room
+                    $moves = $db->getAvailableMovesIfRoom($currentPosition['rowNumber'],$currentPosition['columnNumber']);
+
+                    foreach ($moves as $move)
+                    {
+                        //get the text name of the position from the game map
+                        $name = $db->getCellName($move,$_GET['id'] );
+                        //set value of the select option to the 2 digit number and the text to the room/hall
+                        echo "<option value='". $move . "'>Move to " . $name . "</option>";
+
+
+                    }
+
+                }
+                else
+                {
+                    echo "<pre>";
+                    echo "farts";
+                    echo "<pre>";
+                }
+
+
+                ?>
+                </select>
+            </div>
+            <br />
+            <div class="form-check form-check-inline">
+                <label class="form-check-label" for="inlineRadio1">Would you like to make a suggestion(you can only make a suggestion for the room you move to)?:</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <select class="form-control" id="exampleFormControlSelect1" name="suspect">
+                    <option value="1">Colonel Mustard</option>
+                    <option value="2">Miss Scarlet</option>
+                    <option value="3">Professor Plum</option>
+                    <option value="4">Mr. Green</option>
+                    <option value="5">Mrs. White</option>
+                    <option value="6">Mrs. Peacock</option>
                 </select>
             </div>
             <div class="form-check form-check-inline">
-                <label class="form-check-label" for="inlineRadio1">Would you like to make a suggestion?:</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>suspect</option>
-                    <option>suspect</option>
-                    <option>suspect</option>
-                    <option>suspect</option>
-                    <option>suspect</option>
+                <select class="form-control" id="exampleFormControlSelect1" name="weapon">
+                    <option value="1">Rope</option>
+                    <option value="2">Lead Pipe</option>
+                    <option value="3">Knife</option>
+                    <option value="4">Wrench</option>
+                    <option value="5">Candlestick</option>
+                    <option value="6">Revolver</option>
                 </select>
             </div>
             <div class="form-check form-check-inline">
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>weapon</option>
-                    <option>weapon</option>
-                    <option>weapon</option>
-                    <option>weapon</option>
-                    <option>weapon</option>
-                </select>
-            </div>
-            <div class="form-check form-check-inline">
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>room</option>
-                    <option>room</option>
-                    <option>room</option>
-                    <option>room</option>
-                    <option>room</option>
-                </select>
-            </div>
-            <div class="form-check form-check-inline">
-                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                <button name="submit" type="submit" class="btn btn-primary mb-2">Submit</button>
             </div>
 
         </form>
@@ -219,7 +246,8 @@ if( isset($_SESSION["userName"]) <> 1 )
                 //this is where you want to assemble the table
 
                 //change the color of the tile if it is a hallway
-                if($rowObj["roomName"] == 'hallway')
+
+                if(strpos($rowObj["roomName"], 'hallway') !== false)
                 {
                     //echo "<div class='col-2' style='background: white; border: none'></div>";
                     echo "<div class='col-2' style='background: #adb5bd'>" . $rowObj["roomName"];

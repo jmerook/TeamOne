@@ -252,6 +252,47 @@ class Database
         }
     }
 
+    public function getCellName($location, $game)
+    {
+        $row = $location[0];
+        $column = $location[1];
+
+
+        $stmt = $this->pdo->prepare('select * 
+	      from clueless.game_map 
+          where game_board = :game
+          and rowNumber = :rowNumber
+          and columnNumber = :columnNumber');
+
+        $stmt->execute(['game' => $game, 'rowNumber' => $row, 'columnNumber' => $column]);
+
+
+        $room = $stmt->fetch();
+        return $room['roomName'];
+
+
+
+
+    }
+
+    public function getCellContents($row, $column, $game)
+    {
+        //see if anyone is currently in that cell, if so then return 1 instead of 0
+
+
+        $stmt = $this->pdo->prepare('select * 
+	      from clueless.game_map 
+          where game_board = :game
+          and rowNumber = :rowNum
+          and columnNumber = :columnNum');
+
+        $stmt->execute(['game' => $game, 'rowNum' => $row, 'columnNum' => $column]);
+
+
+        $occupant = $stmt->fetch();
+        return $occupant['occupant'];
+    }
+
     public function createGame($gameName)
     {
         $db = new Database();
@@ -290,6 +331,164 @@ class Database
 
 
 
+    }
+
+    public function getPlayersBoardPosition($id, $game)
+    {
+
+
+        $stmt = $this->pdo->prepare('select user.id, user.game, user.characterNumber, game_map.rowNumber, game_map.columnNumber, game_map.roomName
+	      from clueless.user 
+          join clueless.game_map on game_map.game_board = user.game
+          where user.id = :id
+          and user.game = :game
+          and game_map.occupant = user.characterNumber');
+
+        $stmt->execute(['id' => $id, 'game' => $game]);
+
+        $variable = $stmt->fetch();
+
+
+        return $variable;
+    }
+
+    public function getAvailableMovesIfRoom($row, $column)
+    {
+        //get the available moves for the player if they are in a room and NOT a hallway
+
+
+
+        //the return structure will be a two digit number. the first digit is the row number and the
+        //second digit will be the column number. ex if you are moving to the Study, then it would look like '11'
+
+        //the calling method can use a method to get the text name of the room by parsing the numbers
+
+        $moves = array();
+        $obj = '';
+        if ($row == 1 && $column == 1) //study
+        {
+
+            $obj = '12';
+            array_push($moves, $obj);
+
+            $obj = '21';
+            array_push($moves, $obj);
+
+            $obj = '55';    //secret passage
+            array_push($moves, $obj);
+
+
+        }
+
+        elseif ($row == 1 && $column == 3) //hall
+        {
+            $obj = '12';
+            array_push($moves, $obj);
+
+            $obj = '23';
+            array_push($moves, $obj);
+
+            $obj = '14';
+            array_push($moves, $obj);
+        }
+
+        elseif ($row == 1 && $column == 5) //Lounge
+        {
+            $obj = '14';
+            array_push($moves, $obj);
+
+            $obj = '25';
+            array_push($moves, $obj);
+
+            $obj = '51';    //secret passage
+            array_push($moves, $obj);
+        }
+
+        elseif ($row == 3 && $column == 1) //Library
+        {
+            $obj = '21';
+            array_push($moves, $obj);
+
+            $obj = '32';
+            array_push($moves, $obj);
+
+            $obj = '41';
+            array_push($moves, $obj);
+        }
+
+        elseif ($row == 3 && $column == 3) //Billard Room
+        {
+            $obj = '32';
+            array_push($moves, $obj);
+
+            $obj = '23';
+            array_push($moves, $obj);
+
+            $obj = '34';
+            array_push($moves, $obj);
+
+            $obj = '43';
+            array_push($moves, $obj);
+        }
+
+        elseif ($row == 3 && $column == 5) //Dining Room
+        {
+            $obj = '34';
+            array_push($moves, $obj);
+
+            $obj = '25';
+            array_push($moves, $obj);
+
+            $obj = '45';
+            array_push($moves, $obj);
+
+        }
+
+        elseif ($row == 5 && $column == 1) //Conservatory
+        {
+            $obj = '41';
+            array_push($moves, $obj);
+
+            $obj = '52';
+            array_push($moves, $obj);
+
+            $obj = '15'; //secret passage
+            array_push($moves, $obj);
+
+        }
+
+        elseif ($row == 5 && $column == 3) //Ballroom
+        {
+            $obj = '52';
+            array_push($moves, $obj);
+
+            $obj = '43';
+            array_push($moves, $obj);
+
+            $obj = '54'; //secret passage
+            array_push($moves, $obj);
+
+        }
+
+        elseif ($row == 5 && $column == 5) //Kitchen
+        {
+            $obj = '54';
+            array_push($moves, $obj);
+
+            $obj = '45';
+            array_push($moves, $obj);
+
+            $obj = '11'; //secret passage
+            array_push($moves, $obj);
+
+        }
+
+
+        return $moves;
+    }
+    public function getAvailableMovesIfHallway($row, $column)
+    {
+        //get the available moves for the player if they are in a hallway and NOT a room
     }
 
     public function setInitialGameTurn($gameID)
@@ -339,25 +538,25 @@ class Database
         $stmt = $this->pdo->prepare('INSERT INTO clueless.game_map (rowNumber, columnNumber, roomName, game_board) VALUES (:rowNumber, :columnNumber, :roomName, :game_board)');
 
         $stmt->execute(['rowNumber' => '1', 'columnNumber' => '1', 'roomName' => 'Study', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '1', 'columnNumber' => '2', 'roomName' => 'hallway', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '1', 'columnNumber' => '2', 'roomName' => 'hallway 1', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '1', 'columnNumber' => '3', 'roomName' => 'Hall', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '1', 'columnNumber' => '4', 'roomName' => 'hallway', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '1', 'columnNumber' => '4', 'roomName' => 'hallway 2', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '1', 'columnNumber' => '5', 'roomName' => 'Lounge', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '2', 'columnNumber' => '1', 'roomName' => 'hallway', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '2', 'columnNumber' => '3', 'roomName' => 'hallway', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '2', 'columnNumber' => '5', 'roomName' => 'hallway', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '2', 'columnNumber' => '1', 'roomName' => 'hallway 3', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '2', 'columnNumber' => '3', 'roomName' => 'hallway 4', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '2', 'columnNumber' => '5', 'roomName' => 'hallway 5', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '3', 'columnNumber' => '1', 'roomName' => 'Library', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '3', 'columnNumber' => '2', 'roomName' => 'hallway', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '3', 'columnNumber' => '2', 'roomName' => 'hallway 6', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '3', 'columnNumber' => '3', 'roomName' => 'Billard Room', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '3', 'columnNumber' => '4', 'roomName' => 'hallway', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '3', 'columnNumber' => '4', 'roomName' => 'hallway 7', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '3', 'columnNumber' => '5', 'roomName' => 'Dining Room', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '4', 'columnNumber' => '1', 'roomName' => 'hallway', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '4', 'columnNumber' => '3', 'roomName' => 'hallway', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '4', 'columnNumber' => '5', 'roomName' => 'hallway', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '4', 'columnNumber' => '1', 'roomName' => 'hallway 8', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '4', 'columnNumber' => '3', 'roomName' => 'hallway 9', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '4', 'columnNumber' => '5', 'roomName' => 'hallway 10', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '5', 'columnNumber' => '1', 'roomName' => 'Conservatory', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '5', 'columnNumber' => '2', 'roomName' => 'hallway', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '5', 'columnNumber' => '2', 'roomName' => 'hallway 11', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '5', 'columnNumber' => '3', 'roomName' => 'Ballroom', 'game_board' => $id]);
-        $stmt->execute(['rowNumber' => '5', 'columnNumber' => '4', 'roomName' => 'hallway', 'game_board' => $id]);
+        $stmt->execute(['rowNumber' => '5', 'columnNumber' => '4', 'roomName' => 'hallway 12', 'game_board' => $id]);
         $stmt->execute(['rowNumber' => '5', 'columnNumber' => '5', 'roomName' => 'Kitchen', 'game_board' => $id]);
 
 

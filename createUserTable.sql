@@ -29,9 +29,10 @@ CREATE TABLE `user` (
   `password` varchar(65) NOT NULL,
   `game` int(11) DEFAULT NULL COMMENT 'this is the column to show what game the user is in',
   `characterNumber` int(11) DEFAULT NULL COMMENT 'this is the character they are playing in the game instance',
+  `isTurn` varchar(65) DEFAULT NULL COMMENT 'this flag will tell if it is currently that users turn or not. (true = their turn, false = not their turn)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `userName` (`userName`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8
 
 
 
