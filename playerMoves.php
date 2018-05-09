@@ -26,25 +26,20 @@ else
 
     $db->movePlayer($row, $column, $db->getPlayersGameID($_SESSION["id"]), $_SESSION["id"] );
 
-    header('Location: ./home.phtml');
-
 }
 
 
-
-
-
-//move the player
-
-//check to see if they have made a suggestion, if so check their suggestion again the secret envelope for that game
+//todo check to see if they have made a suggestion, if so check their suggestion again the secret envelope for that game
 
 //if so, then go to the you win page
 
 //else, set the next players turn, and unset the current players turn.
+$db->updateGameTurnToNextPlayer($db->getPlayersGameID($_SESSION["id"]));
+
 // then return to the gameB_board.phtml page
+header('Location: ./home.phtml');
 
 
-//print_r($_POST);
 
 
 

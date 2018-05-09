@@ -708,9 +708,51 @@ class Database
 
     }
 
-    public function updateGameTurnToNextPlayer()
+    public function updateGameTurnToNextPlayer($gameID)
     {
-        //set the current players isTurn flag to 0, and get character #2 and set their isTurn to 1
+        //set the current players isTurn flag to null, and get the next character and set their isTurn to 1
+        #get the characterNumber from the player who's turn it is currently (so that you can delete it later)
+
+        $stmt = $this->pdo->prepare('select *
+            from clueless.user
+            where game = :gameID
+            and isTurn = 1
+            order by characterNumber');
+
+        $stmt->execute(['gameID' => $gameID]);
+
+        $oldUser = $stmt->fetch();
+
+
+        //this is the old character number
+        //$oldUser['characterNumber'];
+
+        #update old player to remove isTurn so that its not their turn anymore.
+
+
+        $stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn = null WHERE game = :gameID and isTurn = 1');
+
+        $stmt->execute(['gameID' => $gameID]);
+
+
+        #if characterNumber == 6, next player is 1 else its characterNumber ++ ..update their row with the turn
+        $stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn = 1 WHERE game = :gameID AND characterNumber = :newCharacterNumber');
+
+
+        $newCharacternumber = '';
+        if($oldUser['characterNumber'] == 6)
+        {
+            //will need to start over if it is the last player in that game instance
+            $newCharacternumber = 1;
+        }
+        else
+        {
+            //cycle through per normal
+            $newCharacternumber  = $oldUser['characterNumber'] + 1;
+        }
+
+        $stmt->execute(['gameID' => $gameID, 'newCharacterNumber' => $newCharacternumber]);
+
     }
 
 
