@@ -293,6 +293,73 @@ class Database
         return $occupant['occupant'];
     }
 
+
+    public function movePlayer($row, $column, $game, $session)
+    {
+
+        $stmt = $this->pdo->prepare('select * 
+	      from clueless.game_map 
+          where game_board = :game
+          and rowNumber = :rowNum
+          and columnNumber = :columnNum');
+
+        $stmt->execute(['game' => $game, 'rowNum' => $row, 'columnNum' => $column]);
+
+
+        $row = $stmt->fetch();
+
+
+        $stmt = $this->pdo->prepare('select user.id, user.game, user.characterNumber, game_map.rowNumber, game_map.columnNumber, game_map.roomName
+	      from clueless.user 
+          join clueless.game_map on game_map.game_board = user.game
+          where user.id = :id
+          and user.game = :game
+          and game_map.occupant = user.characterNumber');
+
+        $stmt->execute(['id' => $session, 'game' => $game]);
+
+        $variable = $stmt->fetch();
+
+
+        //these are the ones that will need to be set to null
+        $oldRow = $variable['rowNumber'];
+        $oldColumn = $variable['columnNumber'];
+
+        //echo "<pre>";
+        //print_r($variable);
+        //echo "</pre>";
+
+        //the row ID to update with the new player
+        //$row['id']
+
+        //this is the character number that will need to be set
+        //$variable['characterNumber'];
+
+        //this is what game we are in
+        //$variable['game'];
+
+
+
+        //update the users new position on the game map
+        $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET occupant= :gameCharacter WHERE id=:rowNumber');
+
+        $stmt->execute(['gameCharacter' => $variable['characterNumber'], 'rowNumber' => $row['id']]);
+        //UPDATE `clueless`.`game_map` SET `occupant`='6' WHERE `id`='404'
+
+
+
+        //remove the old position on the game map by setting it to null
+        $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET occupant = null WHERE rowNumber = :oldRow and columnNumber = :oldColumn and game_board = :game');
+
+        $stmt->execute(['oldRow' => $oldRow, 'oldColumn' => $oldColumn, 'game' => $variable['game']]);
+
+        //UPDATE `clueless`.`game_map` SET `occupant`=null WHERE `rowNumber`='1' and columnNumber = 2
+
+
+
+    }
+
+
     public function createGame($gameName)
     {
         $db = new Database();

@@ -130,7 +130,7 @@ if( isset($_SESSION["userName"]) <> 1 )
             <div class="form-check form-check-inline">
                 <select class="form-control" id="exampleFormControlSelect1" name="move">
                 <?php
-                //get the current position of the player to determine wher they can move on the board
+                //get the current position of the player to determine where they can move on the board
                 $currentPosition = $db->getPlayersBoardPosition($_SESSION["id"], $_GET['id']);
 
                 //pass the current position into the method to get back a list of rows the player can move to

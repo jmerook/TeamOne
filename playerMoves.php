@@ -17,12 +17,15 @@ $occupant = $db->getCellContents($row, $column, $db->getPlayersGameID($_SESSION[
 
 if(isset($occupant))
 {
-    echo "someone is here";
+    //echo "someone is here";
 
 }
 else
 {
-    echo "someone is NOT here";
+
+    $db->movePlayer($row, $column, $db->getPlayersGameID($_SESSION["id"]), $_SESSION["id"] );
+
+    header('Location: ./home.phtml');
 
 }
 
