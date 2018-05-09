@@ -18,6 +18,7 @@ $occupant = $db->getCellContents($row, $column, $db->getPlayersGameID($_SESSION[
 if(isset($occupant))
 {
     //echo "someone is here";
+    //TODO somone needs to write a static html page saying this isn't a valid move and it needs a button to redirect to the home.phtml page
 
 }
 else

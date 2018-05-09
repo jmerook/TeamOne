@@ -424,7 +424,6 @@ class Database
         //get the available moves for the player if they are in a room and NOT a hallway
 
 
-
         //the return structure will be a two digit number. the first digit is the row number and the
         //second digit will be the column number. ex if you are moving to the Study, then it would look like '11'
 
@@ -556,6 +555,136 @@ class Database
     public function getAvailableMovesIfHallway($row, $column)
     {
         //get the available moves for the player if they are in a hallway and NOT a room
+
+        //the return structure will be a two digit number. the first digit is the row number and the
+        //second digit will be the column number. ex if you are moving to hallway 1, then it would look like '12'
+
+        //the calling method can use a method to get the text name of the room by parsing the numbers
+
+        $moves = array();
+        $obj = '';
+
+        if ($row == 1 && $column == 2) //hallway 1
+        {
+
+            $obj = '11';
+            array_push($moves, $obj);
+
+            $obj = '13';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 1 && $column == 4) //hallway 2
+        {
+
+            $obj = '13';
+            array_push($moves, $obj);
+
+            $obj = '15';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 2 && $column == 1) //hallway 3
+        {
+
+            $obj = '11';
+            array_push($moves, $obj);
+
+            $obj = '31';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 2 && $column == 3) //hallway 4
+        {
+            $obj = '13';
+            array_push($moves, $obj);
+
+            $obj = '33';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 2 && $column == 5) //hallway 5
+        {
+
+            $obj = '15';
+            array_push($moves, $obj);
+
+            $obj = '35';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 3 && $column == 2) //hallway 6
+        {
+
+            $obj = '31';
+            array_push($moves, $obj);
+
+            $obj = '33';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 3 && $column == 4) //hallway 7
+        {
+
+            $obj = '33';
+            array_push($moves, $obj);
+
+            $obj = '35';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 4 && $column == 1) //hallway 8
+        {
+
+            $obj = '31';
+            array_push($moves, $obj);
+
+            $obj = '51';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 4 && $column == 3) //hallway 9
+        {
+
+            $obj = '33';
+            array_push($moves, $obj);
+
+            $obj = '53';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 4 && $column == 5) //hallway 10
+        {
+            $obj = '35';
+            array_push($moves, $obj);
+
+            $obj = '55';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 5 && $column == 2) //hallway 11
+        {
+
+            $obj = '51';
+            array_push($moves, $obj);
+
+            $obj = '53';
+            array_push($moves, $obj);
+
+        }
+        elseif ($row == 5 && $column == 4) //hallway 12
+        {
+
+            $obj = '53';
+            array_push($moves, $obj);
+
+            $obj = '55';
+            array_push($moves, $obj);
+
+        }
+
+        return $moves;
+
     }
 
     public function setInitialGameTurn($gameID)

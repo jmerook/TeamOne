@@ -164,9 +164,17 @@ if( isset($_SESSION["userName"]) <> 1 )
                 }
                 else
                 {
-                    echo "<pre>";
-                    echo "farts";
-                    echo "<pre>";
+                    //they player is currently in a hallway
+                    $moves = $db->getAvailableMovesIfHallway($currentPosition['rowNumber'],$currentPosition['columnNumber']);
+                    foreach ($moves as $move)
+                    {
+                        //get the text name of the position from the game map
+                        $name = $db->getCellName($move,$_GET['id'] );
+                        //set value of the select option to the 2 digit number and the text to the room/hall
+                        echo "<option value='". $move . "'>Move to " . $name . "</option>";
+
+
+                    }
                 }
 
 
