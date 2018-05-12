@@ -314,8 +314,8 @@ class Database
           join clueless.game_map on game_map.game_board = user.game
           where user.id = :id
           and user.game = :game
-          and game_map.occupant = user.characterNumber
-          or game_map.suspect = user.characterNumber');
+          and (game_map.occupant = user.characterNumber
+          or game_map.suspect = user.characterNumber)');
 
         $stmt->execute(['id' => $session, 'game' => $game]);
 
