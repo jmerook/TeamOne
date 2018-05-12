@@ -737,21 +737,32 @@ class Database
 
         #if characterNumber == 6, next player is 1 else its characterNumber ++ ..update their row with the turn
         $stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn = 1 WHERE game = :gameID AND characterNumber = :newCharacterNumber');
-
+       // echo "$newCharacterNumber: " . $newCharacterNumber . "<br>";
 
         $newCharacternumber = '';
+
         if($oldUser['characterNumber'] == 6)
         {
             //will need to start over if it is the last player in that game instance
             $newCharacternumber = 1;
         }
-        else
-        {
-            //cycle through per normal
-            $newCharacternumber  = $oldUser['characterNumber'] + 1;
+        else {
+            $newCharacternumber = $oldUser['characterNumber'] + 1;
+
         }
 
+        // Extra processing to determine if the next player is eliminated
         $stmt->execute(['gameID' => $gameID, 'newCharacterNumber' => $newCharacternumber]);
+
+        $stmt = $this->pdo->prepare('SELECT isEliminated from clueless.user where  game = :gameID AND characterNumber = :newCharacterNumber');
+        $stmt->execute(['gameID' => $gameID, 'newCharacterNumber' => $newCharacternumber]);
+        $isEliminated = $stmt->fetch();
+        // Recursive call to skip players that have already been eliminated
+        if($isEliminated['isEliminated'] == true)
+        {
+            $this->updateGameTurnToNextPlayer($gameID);
+        }
+
 
     }
 
@@ -919,5 +930,90 @@ class Database
         }
     }
 
+    public function getUserNameString($userID)
+    {
+
+        $stmt = $this->pdo->prepare('SELECT userName from clueless.user where id = :userID');
+
+        $stmt->execute(['userID' => $userID]);
+
+        $userGameID = $stmt->fetch();
+
+
+        return $userGameID['userName'];
+    }
+    public function setPlayerStatusToEliminated($userID )
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE clueless.user SET isEliminated = true WHERE id = :userID');
+            $stmt->execute(['userID' => $userID]);
+        }
+        catch(PDOException $e)
+        {
+            echo 'setPlayerStatusToEliminated: had an exception: ' . "<br>" . $e->getMessage();
+        }
+
+    }
+    public function isPlayerEliminated($userID)
+    {
+        $stmt = $this->pdo->prepare('SELECT isEliminated from clueless.user where id = :userID');
+
+        $stmt->execute(['userID' => $userID]);
+
+        $isEliminated = $stmt->fetch();
+
+        return $isEliminated['isEliminated'];
+    }
+    public function setGameStatusToFinish($gameID)
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE clueless.game_board SET isOver = true WHERE id = :gameID');
+            $stmt->execute(['gameID' => $gameID]);
+        }
+        catch(PDOException $e)
+        {
+            echo 'setGameStatusToFinish: had an exception: ' . "<br>" . $e->getMessage();
+        }
+    }
+    public function isGameOver($gameID)
+    {
+        $stmt = $this->pdo->prepare('SELECT isOver from clueless.game_board where id = :gameID');
+
+        $stmt->execute(['gameID' => $gameID]);
+
+        $gameStatus = $stmt->fetch();
+
+        return $gameStatus['isOver'];
+    }
+    public function updateUserStatusTable($gameID, $userName)
+    {
+        $list = $this->getPlayersFromGame($gameID);
+        foreach ($list as $user)
+        {
+            if($userName != $user['userName'])
+            {
+                $this->setPlayerStatusToEliminated($user['id']);
+            }
+        }
+    }
+    private function setPlayerTurnToFalse($userID)
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn = false WHERE id = :userID');
+            $stmt->execute(['userID' => $userID]);
+        }
+        catch(PDOException $e)
+        {
+            echo 'setPlayerTurnToFalse: had an exception: ' . "<br>" . $e->getMessage();
+        }
+    }
+    public function clearPlayerTurnField($gameID)
+    {
+        $list = $this->getPlayersFromGame($gameID);
+        foreach ($list as $user)
+        {
+            $this->setPlayerTurnToFalse($user['id']);
+        }
+    }
 
 }
