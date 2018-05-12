@@ -30,6 +30,7 @@ CREATE TABLE `user` (
   `game` int(11) DEFAULT NULL COMMENT 'this is the column to show what game the user is in',
   `characterNumber` int(11) DEFAULT NULL COMMENT 'this is the character they are playing in the game instance',
   `isTurn` varchar(65) DEFAULT NULL COMMENT 'this flag will tell if it is currently that users turn or not. (true = their turn, false = not their turn)',
+  `isEliminated` varchar(65) DEFAULT NULL COMMENT 'this flag will tell if user is eliminated or not. (true = user is eliminated, false = not eliminated)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `userName` (`userName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8
@@ -42,6 +43,7 @@ CREATE TABLE `game_board` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Game ID',
   `gameName` varchar(45) NOT NULL,
   `secretEnvelope` varchar(45) NOT NULL COMMENT 'holds the FK to the secret envelope table to show which secret envelop goes with with game\n',
+  `isOver` varchar(45) NOT NULL COMMENT 'this flag will determine if certain game is over\n',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `secretEnvelop_UNIQUE` (`secretEnvelope`)
@@ -89,14 +91,14 @@ CREATE TABLE `game_map` (
 
 
 
-INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (0,'Jacob','Merook','jmerook2','password',40);
-INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (1,'Jacob','Merook','jacobmerook@gmail.com','password',36);
-INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (2,'Jacob','Merook','jmerook1','password',36);
-INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (12,'Jacob','Merook','merook','password',36);
-INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`) VALUES (13,'Jacob','Merook','merook1','password',NULL);
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`,`isEliminated`) VALUES (0,'Jacob','Merook','jmerook2','password',40,false );
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`,`isEliminated`) VALUES (1,'Jacob','Merook','jacobmerook@gmail.com','password',36,false);
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`,`isEliminated`) VALUES (2,'Jacob','Merook','jmerook1','password',36,false);
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`,`isEliminated`) VALUES (12,'Jacob','Merook','merook','password',36,false);
+INSERT INTO `user` (`id`,`firstName`,`lastName`,`userName`,`password`,`game`,`isEliminated`) VALUES (13,'Jacob','Merook','merook1','password',NULL,false);
 
-INSERT INTO `game_board` (`id`,`gameName`,`secretEnvelope`) VALUES (36,'test','50');
-INSERT INTO `game_board` (`id`,`gameName`,`secretEnvelope`) VALUES (40,'test1','2');
+INSERT INTO `game_board` (`id`,`gameName`,`secretEnvelope`,isOver) VALUES (36,'test','50',FALSE );
+INSERT INTO `game_board` (`id`,`gameName`,`secretEnvelope`,isOver) VALUES (40,'test1','2',FALSE );
 
 INSERT INTO `clueless`.`weapon` (`weapon`) VALUES ('Rope');
 INSERT INTO `clueless`.`weapon` (`weapon`) VALUES ('Lead Pipe');

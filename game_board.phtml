@@ -62,6 +62,7 @@ if( isset($_SESSION["userName"]) <> 1 )
               echo "<th scope='col'>First Name</th>";
               echo "<th scope='col'>Character</th>";
               echo "<th scope='col'>Turn</th>";
+              echo "<th scope='col'>Player Status</th>";
             echo "</tr>";
           echo "</thead>";
           echo "<tbody>";
@@ -88,6 +89,31 @@ if( isset($_SESSION["userName"]) <> 1 )
                 else
                 {
                     echo "<td></td>";
+                }
+                //Todo create a col to indicate game winner
+                if($db->isGameOver($db->getPlayersGameID($user['id'])) == true)
+                {
+                    if( $user['isEliminated'] == false)
+                    {
+                        echo "<td>winner</td>";
+                    }
+                    else{
+                        // Indicate that the rest of the players are..
+                        echo "<td>loser</td>";
+                    }
+                }
+                else
+                {
+                    // When game is not yet over, a player can be eliminated by making a wrong accusation
+                    // This is to indicate that
+                    if( $user['isEliminated'] == true)
+                    {
+                        echo "<td>loser</td>";
+                    }
+                    else
+                    {
+                        echo "<td>active</td>";
+                    }
                 }
 
                 echo "</tr>";
@@ -132,7 +158,8 @@ if( isset($_SESSION["userName"]) <> 1 )
                 <?php
                 //get the current position of the player to determine where they can move on the board
                 $currentPosition = $db->getPlayersBoardPosition($_SESSION["id"], $_GET['id']);
-
+                //Todo: Add a condition to prevent player move if the game is over
+                //Todo: Add a condidtion to prevent player move if player is eliminated
                 //pass the current position into the method to get back a list of rows the player can move to
                 //echo "<pre>";
                 //print_r($currentPosition['roomName']);
@@ -208,7 +235,49 @@ if( isset($_SESSION["userName"]) <> 1 )
             <div class="form-check form-check-inline">
                 <button name="submit" type="submit" class="btn btn-primary mb-2">Submit</button>
             </div>
+        </form>
 
+        <!-- TODO; send this to a page to validate user accusation -->
+        <form action="playerMakesAccusation.php" method="POST">
+            <div class="form-check form-check-inline">
+                <label class="form-check-label" for="inlineRadio1">Would you like to make an accusation(you can only make an accusation when it's your turn)?:</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <select class="form-control" id="exampleFormControlSelect1" name="suspect">
+                    <option value="Colonel Mustard">Colonel Mustard</option>
+                    <option value="Miss Scarlet">Miss Scarlet</option>
+                    <option value="Professor Plum">Professor Plum</option>
+                    <option value="Mr. Green">Mr. Green</option>
+                    <option value="Mrs. White">Mrs. White</option>
+                    <option value="Mrs. Peacock">Mrs. Peacock</option>
+                </select>
+            </div>
+            <div class="form-check form-check-inline">
+                <select class="form-control" id="exampleFormControlSelect1" name="weapon">
+                    <option value="Rope">Rope</option>
+                    <option value="Lead Pipe">Lead Pipe</option>
+                    <option value="Knife">Knife</option>
+                    <option value="Wrench">Wrench</option>
+                    <option value="Candlestick">Candlestick</option>
+                    <option value="Revolver">Revolver</option>
+                </select>
+            </div>
+            <div class="form-check form-check-inline">
+                <select class="form-control" id="exampleFormControlSelect1" name="room">
+                    <option value="Study">Study</option>
+                    <option value="Hall">Hall</option>
+                    <option value="Lounge">Lounge</option>
+                    <option value="Dinning Room">Dinning Room</option>
+                    <option value="Kitchen">Kitchen</option>
+                    <option value="Ballroom">Ballroom</option>
+                    <option value="Conservatory">Conservatory</option>
+                    <option value="Library">Library</option>
+                    <option value="Billard Room">Billard Room</option>
+                </select>
+            </div>
+            <div class="form-check form-check-inline">
+                <button name="submitAccusation" type="submit" class="btn btn-primary mb-2">Submit</button>
+            </div>
         </form>
         <?php } ?>
 

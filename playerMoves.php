@@ -60,6 +60,7 @@ $room = $db->getRoomFromCoordinates($row,$column);
 //if so, then go to the you win page
 
 //else, set the next players turn, and unset the current players turn.
+
 $db->updateGameTurnToNextPlayer($db->getPlayersGameID($_SESSION["id"]));
 
 // then return to the gameB_board.phtml page
