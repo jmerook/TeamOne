@@ -278,11 +278,21 @@ if( isset($_SESSION["userName"]) <> 1 )
                 //echo "<div class='col-2'>" . $rowObj["roomName"];
                     echo "<div class='row'>";
                     //display whether there is someone in the room/hallway
+
+
+                ////TWEAK THIS PART TO ALLOW 2 PLAYERS IN
                     if($rowObj['occupant'] <> null)
                     {
                         //get the username & character name of the person in that square
                         //TODO add the username of the user that is the character
                         $suspectName = $db->getSuspectCard($rowObj['occupant']);
+                        echo "<div class='col-md-6'>" . $suspectName. "</div>";
+                    }
+                    if($rowObj['suspect'] <> null)
+                    {
+                        //get the username & character name of the person in that square
+                        //TODO add the username of the user that is the character
+                        $suspectName = $db->getSuspectCard($rowObj['suspect']);
                         echo "<div class='col-md-6'>" . $suspectName. "</div>";
                     }
                     echo "</div>";

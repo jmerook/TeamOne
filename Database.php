@@ -309,12 +309,13 @@ class Database
         $row = $stmt->fetch();
 
 
-        $stmt = $this->pdo->prepare('select user.id, user.game, user.characterNumber, game_map.rowNumber, game_map.columnNumber, game_map.roomName
+        $stmt = $this->pdo->prepare('select user.id, user.game, user.characterNumber, game_map.rowNumber, game_map.columnNumber, game_map.roomName, game_map.occupant, game_map.suspect
 	      from clueless.user 
           join clueless.game_map on game_map.game_board = user.game
           where user.id = :id
           and user.game = :game
-          and game_map.occupant = user.characterNumber');
+          and game_map.occupant = user.characterNumber
+          or game_map.suspect = user.characterNumber');
 
         $stmt->execute(['id' => $session, 'game' => $game]);
 
@@ -339,7 +340,6 @@ class Database
         //$variable['game'];
 
 
-
         //update the users new position on the game map
         $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET occupant= :gameCharacter WHERE id=:rowNumber');
 
@@ -348,15 +348,100 @@ class Database
 
 
 
-        //remove the old position on the game map by setting it to null
-        $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET occupant = null WHERE rowNumber = :oldRow and columnNumber = :oldColumn and game_board = :game');
+        if($variable['suspect'] == $variable['characterNumber']){
+            $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET suspect = null WHERE rowNumber = :oldRow and columnNumber = :oldColumn and game_board = :game');
 
-        $stmt->execute(['oldRow' => $oldRow, 'oldColumn' => $oldColumn, 'game' => $variable['game']]);
+            $stmt->execute(['oldRow' => $oldRow, 'oldColumn' => $oldColumn, 'game' => $variable['game']]);
+        }else {
+            //remove the old position on the game map by setting it to null
+            $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET occupant = null WHERE rowNumber = :oldRow and columnNumber = :oldColumn and game_board = :game');
+
+            $stmt->execute(['oldRow' => $oldRow, 'oldColumn' => $oldColumn, 'game' => $variable['game']]);
+        }
 
         //UPDATE `clueless`.`game_map` SET `occupant`=null WHERE `rowNumber`='1' and columnNumber = 2
 
 
 
+    }
+
+    public function moveSuspect($row, $column, $game, $session)
+    {
+
+        $stmt = $this->pdo->prepare('select * 
+	      from clueless.game_map 
+          where game_board = :game
+          and rowNumber = :rowNum
+          and columnNumber = :columnNum');
+
+        $stmt->execute(['game' => $game, 'rowNum' => $row, 'columnNum' => $column]);
+
+
+        $row = $stmt->fetch();
+
+
+        $stmt = $this->pdo->prepare('select user.id, user.game, user.characterNumber, game_map.rowNumber, game_map.columnNumber, game_map.roomName, game_map.occupant, game_map.suspect
+	      from clueless.user 
+          join clueless.game_map on game_map.game_board = user.game
+          where user.id = :id
+          and user.game = :game
+          and (game_map.occupant = user.characterNumber
+          or game_map.suspect = user.characterNumber)');
+
+        $stmt->execute(['id' => $session, 'game' => $game]);
+
+        $variable = $stmt->fetch();
+
+
+        //these are the ones that will need to be set to null
+        $oldRow = $variable['rowNumber'];
+        $oldColumn = $variable['columnNumber'];
+
+        //update the users new position on the game map
+        $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET suspect= :gameCharacter WHERE id=:rowNumber');
+
+        $stmt->execute(['gameCharacter' => $variable['characterNumber'], 'rowNumber' => $row['id']]);
+        //UPDATE `clueless`.`game_map` SET `occupant`='6' WHERE `id`='404'
+
+
+
+        if($variable['occupant'] == $variable['characterNumber']){
+            $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET occupant = null WHERE rowNumber = :oldRow and columnNumber = :oldColumn and game_board = :game');
+
+            $stmt->execute(['oldRow' => $oldRow, 'oldColumn' => $oldColumn, 'game' => $variable['game']]);
+        }
+        if($variable['suspect'] == $variable['characterNumber']){
+            //remove the old position on the game map by setting it to null
+            $stmt = $this->pdo->prepare('UPDATE clueless.game_map SET suspect = null WHERE rowNumber = :oldRow and columnNumber = :oldColumn and game_board = :game');
+
+            $stmt->execute(['oldRow' => $oldRow, 'oldColumn' => $oldColumn, 'game' => $variable['game']]);
+        }
+
+        //UPDATE `clueless`.`game_map` SET `occupant`=null WHERE `rowNumber`='1' and columnNumber = 2
+
+
+    }
+
+    public function getPlayerIdBySuspect($suspect, $game) {
+
+        $stmt = $this->pdo->prepare('select suspect.id
+	      from clueless.suspect 
+          where suspect.suspect = :suspect');
+
+        $stmt->execute(['suspect' => $suspect]);
+
+        $susid = $stmt->fetch();
+
+        $stmt = $this->pdo->prepare('select user.id
+	      from clueless.user 
+          where user.characterNumber = :id
+          and user.game = :game');
+
+        $stmt->execute(['id' => $susid, 'game' => $game]);
+
+        $variable = $stmt->fetch();
+
+        return $variable;
     }
 
 
@@ -552,6 +637,56 @@ class Database
 
         return $moves;
     }
+
+    public function getRoomFromCoordinates($row, $column)
+    {
+        if ($row == 1 && $column == 1) //study
+        {
+            return 'Study';
+        }
+
+        elseif ($row == 1 && $column == 3) //hall
+        {
+          return 'Hall';
+        }
+
+        elseif ($row == 1 && $column == 5) //Lounge
+        {
+           return 'Lounge';
+        }
+
+        elseif ($row == 3 && $column == 1) //Library
+        {
+           return 'Library';
+        }
+
+        elseif ($row == 3 && $column == 3) //Billard Room
+        {
+            return 'Billiard Room';
+        }
+
+        elseif ($row == 3 && $column == 5) //Dining Room
+        {
+            return 'Dining Room';
+        }
+
+        elseif ($row == 5 && $column == 1) //Conservatory
+        {
+            return 'Conservatory';
+        }
+
+        elseif ($row == 5 && $column == 3) //Ballroom
+        {
+            return 'Ballroom';
+        }
+
+        elseif ($row == 5 && $column == 5) //Kitchen
+        {
+            return 'Kitchen';
+        }
+
+    }
+
     public function getAvailableMovesIfHallway($row, $column)
     {
         //get the available moves for the player if they are in a hallway and NOT a room
@@ -686,6 +821,7 @@ class Database
         return $moves;
 
     }
+
 
     public function setInitialGameTurn($gameID)
     {
