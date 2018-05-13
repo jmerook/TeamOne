@@ -27,13 +27,23 @@ echo "weapon: " . $accusationWeapon . "<br>";
 echo "room: " . $accusationRoom . "<br>";
 // Todo: get secret envelope
 echo "<b> Secret Envelop Contains: </b>" . "<br>";
-echo "suspect card: " . $db->getSuspectCard($db->getLastCreatedSecretEnvelope())  . "<br>";
-echo "weapon card: " . $db->getWeaponCard($db->getLastCreatedSecretEnvelope())  . "<br>";
-echo "room card: " . $db->getRoomCard($db->getLastCreatedSecretEnvelope())  . "<br>";
+$envelope =  $db->getLastCreatedSecretEnvelope();
+$realSuspect = $envelope['suspect'];
+$realWeapon = $envelope['weapon'];
+$realRoom = $envelope['room'];
+//echo "suspect card: " . $db->getSuspectCard($db->getLastCreatedSecretEnvelope())  . "<br>";
+//echo "weapon card: " . $db->getWeaponCard($db->getLastCreatedSecretEnvelope())  . "<br>";
+//echo "room card: " . $db->getRoomCard($db->getLastCreatedSecretEnvelope())  . "<br>";
+
+echo "suspect card: " . $envelope['suspect']  . "<br>";
+echo "suspect card: " . $envelope['weapon']  . "<br>";
+echo "suspect card: " . $envelope['room']  . "<br>";
+
 // Todo: compare accusation with secret envelop content
-if ($accusationSuspect == $db->getSuspectCard($db->getLastCreatedSecretEnvelope()) &&
-    $accusationWeapon == $db->getWeaponCard($db->getLastCreatedSecretEnvelope()) &&
-    $accusationRoom == $db->getRoomCard($db->getLastCreatedSecretEnvelope()) )
+//if ($accusationSuspect == $db->getSuspectCard($db->getLastCreatedSecretEnvelope()) &&
+  //  $accusationWeapon == $db->getWeaponCard($db->getLastCreatedSecretEnvelope()) &&
+ //   $accusationRoom == $db->getRoomCard($db->getLastCreatedSecretEnvelope()) )
+if(($accusationSuspect == $realSuspect) && ($accusationRoom == $realRoom) && ($accusationWeapon == $realWeapon))
 {
     echo "<b>" . $db->getUserNameString($db->getCurrentPlayer($playerGameID))  . " has won the game!!!" . "</b><br>";
     // Update the game status
