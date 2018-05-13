@@ -65,11 +65,12 @@ $room = $db->getRoomFromCoordinates($row,$column);
 
 //else, set the next players turn, and unset the current players turn.
 
-$db->updateGameTurnToNextPlayer($db->getPlayersGameID($_SESSION["id"]));
-
 $notificationText = " has changed the state on game board ";
 
 $db->createNotification($_SESSION["id"], $db->getPlayersGameID($_SESSION["id"]), $notificationText);
+
+$db->updateGameTurnToNextPlayer($db->getPlayersGameID($_SESSION["id"]));
+
 
 // then return to the gameB_board.phtml page
 header('Location: ./home.phtml');
