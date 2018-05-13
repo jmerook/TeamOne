@@ -51,7 +51,7 @@ foreach ($_POST['playerSelect'] as $selectedOption)
 }
 
 //direct the page to the game board page to start the game
-$db->distributeCards($lastGameCreated);
+//$db->distributeCards($lastGameCreated);
 
 //set the first player of the game (first character) to be their turn to start the game.
 $db->setInitialGameTurn($lastGameCreated);

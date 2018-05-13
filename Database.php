@@ -477,7 +477,7 @@ class Database
 
     }
 
-    public function distributeCards($gameId)
+    /**public function distributeCards($gameId)
     {
 
         $players = $this->getPlayersFromGame($gameId);
@@ -512,7 +512,7 @@ class Database
         //is the players even added to this yet?
         //if this doesnt work, try updating on the users ID which is in the session variable
         //$stmt->execute(['isTurn' => '1', 'gameID' => $gameID, 'characterNumber' => '1']);
-    }
+    }*/
 
     public function getPlayersBoardPosition($id, $game)
     {
