@@ -27,14 +27,16 @@ echo "weapon: " . $accusationWeapon . "<br>";
 echo "room: " . $accusationRoom . "<br>";
 // Todo: get secret envelope
 echo "<b> Secret Envelop Contains: </b>" . "<br>";
-$envelope =  $db->getLastCreatedSecretEnvelope();
+$envelope =  $db->getLastCreatedSecretEnvelopeContents();
 $realSuspect = $envelope['suspect'];
 $realWeapon = $envelope['weapon'];
 $realRoom = $envelope['room'];
 //echo "suspect card: " . $db->getSuspectCard($db->getLastCreatedSecretEnvelope())  . "<br>";
 //echo "weapon card: " . $db->getWeaponCard($db->getLastCreatedSecretEnvelope())  . "<br>";
 //echo "room card: " . $db->getRoomCard($db->getLastCreatedSecretEnvelope())  . "<br>";
-
+echo"<pre>";
+    print_r($realSuspect);
+echo"</pre>";
 echo "suspect card: " . $envelope['suspect']  . "<br>";
 echo "suspect card: " . $envelope['weapon']  . "<br>";
 echo "suspect card: " . $envelope['room']  . "<br>";

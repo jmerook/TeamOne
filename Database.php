@@ -1062,6 +1062,17 @@ class Database
 
     }
 
+    public function getLastCreatedSecretEnvelopeContents()
+    {
+
+        $stmt = $this->pdo->query('select * from clueless.envelope order by id desc limit 1;');
+
+        $envelopeID = $stmt->fetch();
+
+        return $envelopeID;
+
+    }
+
 
     public function getLastPlayerInGame($gameID)
     {
