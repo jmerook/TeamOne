@@ -21,14 +21,6 @@ $weapon = $_POST['weapon'];
 
 $occupant = $db->getCellContents($row, $column, $db->getPlayersGameID($_SESSION["id"]));
 
-function debug_to_console( $data ) {
-    $output = $data;
-    if ( is_array( $output ) )
-        $output = implode( ',', $output);
-
-    echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
-}
-
 if(isset($occupant))
 {
     //echo "someone is here";
@@ -53,9 +45,6 @@ $room = $db->getRoomFromCoordinates($row,$column);
     //working as intended
     $suspectId = $db->getPlayerIdBySuspect($suspect,$db->getPlayersGameID($_SESSION["id"]));
 
-    echo "<pre>";
-    print_r($suspectId);
-    echo "</pre>";
     $db->moveSuspect($row, $column, $db->getPlayersGameID($_SESSION["id"]), $suspectId );
 
 
