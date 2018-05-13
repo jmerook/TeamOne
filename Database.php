@@ -424,30 +424,23 @@ class Database
 
     public function getPlayerIdBySuspect($suspect, $game) {
 
-        $stmt = $this->pdo->prepare('select suspect.id
-	      from clueless.suspect 
-          where suspect.suspect = :suspect');
-
-        $stmt->execute(['suspect' => $suspect]);
-
-        $susid = $stmt->fetch();
-
         $stmt = $this->pdo->prepare('select user.id
 	      from clueless.user 
           where user.characterNumber = :id
           and user.game = :game');
 
-        $stmt->execute(['id' => $susid, 'game' => $game]);
+        $stmt->execute(['id' => $suspect, 'game' => $game]);
 
         $variable = $stmt->fetch();
 
-        return $variable;
+        return $variable['id'];
     }
 
 
     public function createGame($gameName)
     {
         $db = new Database();
+
 
         //random crime weapon card
         $varWeaponNum = rand(1,6);
@@ -457,13 +450,13 @@ class Database
         $varSuspectNum = rand(1,6);
         $suspect = $db->getSuspectCard($varSuspectNum);
 
-
         //random room card
         $varRoomNum = rand(1,9);
         $room = $db->getRoomCard($varRoomNum);
 
         //insert card into card table
         $db->createEnvelope($suspect, $weapon, $room);
+
 
 
         $secretEnvelope = $db->getLastCreatedSecretEnvelope();
@@ -482,7 +475,43 @@ class Database
 
 
 
+    }
 
+    public function distributeCards($gameId)
+    {
+
+        $players = $this->getPlayersFromGame($gameId);
+
+        $stmt = $this->pdo->prepare('SELECT * FROM clueless.weapon');
+
+        $weapons = $stmt->execute();
+
+        shuffle($weapons);
+
+        $envelope = $this->getLastCreatedSecretEnvelope();
+
+        for($i = 0; $i <= 5; $i++) {
+            $weapon = array_pop($weapons);
+            if(($weapon != null) && ($weapon['weapon'] != $envelope['weapon'])){
+                $player = array_rand($players);
+                giveWeaponCard($weapon,$player);
+            }
+        }
+
+    }
+
+    public function giveWeaponCard($weapon,$player){
+
+
+        $stmt = $this->pdo->prepare('UPDATE clueless.user SET weaponcard = :weaponid WHERE id = :playerId');
+
+        $stmt->execute(['weaponId' => $weapon['id'],'playerId' => $player['id']]);
+            //$stmt = $this->pdo->prepare('UPDATE clueless.user SET isTurn = :isTurn WHERE game = :gameID AND characterNumber = :characterNumber');
+
+
+        //is the players even added to this yet?
+        //if this doesnt work, try updating on the users ID which is in the session variable
+        //$stmt->execute(['isTurn' => '1', 'gameID' => $gameID, 'characterNumber' => '1']);
     }
 
     public function getPlayersBoardPosition($id, $game)
@@ -492,6 +521,22 @@ class Database
         $stmt = $this->pdo->prepare('select user.id, user.game, user.characterNumber, game_map.rowNumber, game_map.columnNumber, game_map.roomName
 	      from clueless.user 
           join clueless.game_map on game_map.game_board = user.game
+          where user.id = :id
+          and user.game = :game
+          and game_map.occupant = user.characterNumber');
+
+        $stmt->execute(['id' => $id, 'game' => $game]);
+
+        $variable = $stmt->fetch();
+
+
+        return $variable;
+    }
+
+    public function getPlayersCards($id, $game)
+    {
+        $stmt = $this->pdo->prepare('select user.id, user.game, user.weaponcard, user.suspectcard
+	      from clueless.user 
           where user.id = :id
           and user.game = :game
           and game_map.occupant = user.characterNumber');
@@ -1150,6 +1195,37 @@ class Database
         {
             $this->setPlayerTurnToFalse($user['id']);
         }
+    }
+
+    public function createNotification($userID, $gameID, $notificationText)
+
+    {
+        $pdo = new Database();
+        //gets user id from method input to get what game they are assigned to
+        //$gameID = $pdo->getPlayersGameID($id);
+        $string = $pdo->getSuspectCard($userID).$notificationText.$gameID;
+        //query the notifications table to get all the notifications for that game
+        $stmt = $this->pdo->prepare('INSERT INTO clueless.notification (notifText, game) VALUES (:string, :gameID)');
+        $stmt->execute(['string' => $string, 'gameID' =>$gameID]);
+
+    }
+
+    public function getNotification($id)
+
+    {
+        $pdo = new Database();
+        //gets user id from method input to get what game they are assigned to
+        $gameID = $pdo->getPlayersGameID($id);
+        //query the notifications table to get all the notifications for that game
+        $stmt = $this->pdo->prepare('select * from clueless.notification where game = :gameID order by id desc');
+        $stmt->execute(['gameID' => $gameID]);
+        $list = array();
+        while ($notification = $stmt->fetch())
+        {
+            array_push($list,$notification);
+        }
+        return $list;
+
     }
 
 }

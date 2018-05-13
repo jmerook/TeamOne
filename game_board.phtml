@@ -148,13 +148,12 @@ if( isset($_SESSION["userName"]) <> 1 )
 
         <hr/>
 
-
         <form action="playerMoves.php" method="POST">
             <div class="form-check form-check-inline">
                 <label class="form-check-label" for="inlineRadio1">Where would you like to move?:</label>
             </div>
             <div class="form-check form-check-inline">
-                <select class="form-control" id="exampleFormControlSelect1" name="move">
+                        <select class="form-control" id="exampleFormControlSelect1" name="move">
                 <?php
                 //get the current position of the player to determine where they can move on the board
                 $currentPosition = $db->getPlayersBoardPosition($_SESSION["id"], $_GET['id']);
@@ -184,8 +183,6 @@ if( isset($_SESSION["userName"]) <> 1 )
                         $name = $db->getCellName($move,$_GET['id'] );
                         //set value of the select option to the 2 digit number and the text to the room/hall
                         echo "<option value='". $move . "'>Move to " . $name . "</option>";
-
-
                     }
 
                 }
@@ -362,6 +359,7 @@ if( isset($_SESSION["userName"]) <> 1 )
                         //get the username & character name of the person in that square
                         //TODO add the username of the user that is the character
                         $suspectName = $db->getSuspectCard($rowObj['suspect']);
+
                         echo "<div class='col-md-6'>" . $suspectName. "</div>";
                     }
                     echo "</div>";

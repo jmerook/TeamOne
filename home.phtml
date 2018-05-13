@@ -168,6 +168,35 @@ if( isset($_SESSION["userName"]) <> 1 )
         </tbody>
     </table>
 
+    <h3>Game Notification</h3>
+    <h5>These are the most recent notifcations for the game you are assigned to</h5>
+    <p>NOTE: if you join a game, it will unassign you from your current game</p>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">game</th>
+            <th scope="col">notification</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <?php
+
+        //returns a list of notifications for the game
+
+        $list = $db->getNotification($_SESSION["id"]);
+        foreach ($list as $item)
+        {
+            echo "<tr>";
+            echo "<th>" . $item['game'] . "</th>";
+            echo "<td>" . $item['notifText'] . "</td>";
+            echo "</tr>";
+        }
+
+        ?>
+
+        </tbody>
+    </table>
 
     <h3>Movement Rules</h3>
     <h4>**make this into its own FAQ page**</h4>

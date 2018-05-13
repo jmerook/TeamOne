@@ -31,6 +31,9 @@ CREATE TABLE `user` (
   `characterNumber` int(11) DEFAULT NULL COMMENT 'this is the character they are playing in the game instance',
   `isTurn` varchar(65) DEFAULT NULL COMMENT 'this flag will tell if it is currently that users turn or not. (true = their turn, false = not their turn)',
   `isEliminated` varchar(65) DEFAULT NULL COMMENT 'this flag will tell if user is eliminated or not. (true = user is eliminated, false = not eliminated)',
+  `weaponcard` varchar(65) DEFAULT NULL COMMENT 'weapons assigned to the user',
+  `suspectcard` varchar(65) DEFAULT NULL COMMENT 'suspects assigned to the user',
+  `roomcard` varchar(65) DEFAULT NULL COMMENT 'rooms assigned to the user',
   PRIMARY KEY (`id`),
   UNIQUE KEY `userName` (`userName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8
@@ -88,6 +91,14 @@ CREATE TABLE `game_map` (
   `occupant` varchar(45) DEFAULT NULL COMMENT 'this will be updated each turn when a user moves in or out of the location',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8
+
+CREATE TABLE `notification` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `notifText` varchar(45) NOT NULL COMMENT 'this is the text that will be shown (playerx moved in gamex), (player suggested in game), etc.',
+  `game` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8
 
 
 

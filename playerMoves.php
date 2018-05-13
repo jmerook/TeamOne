@@ -1,5 +1,5 @@
 <?php
-//ini_set('display_errors',"1");
+ini_set('display_errors',"1");
 session_start();
 include "Database.php";
 include "User.php";
@@ -14,6 +14,9 @@ $column = $move[1];
 
 $suspect = $_POST['suspect'];
 
+echo "<pre>";
+print_r($suspect);
+echo "</pre>";
 $weapon = $_POST['weapon'];
 
 $occupant = $db->getCellContents($row, $column, $db->getPlayersGameID($_SESSION["id"]));
@@ -50,9 +53,10 @@ $room = $db->getRoomFromCoordinates($row,$column);
     //working as intended
     $suspectId = $db->getPlayerIdBySuspect($suspect,$db->getPlayersGameID($_SESSION["id"]));
 
-    echo "<script>console.log( 'suspectId: " . $suspectId . "' );</script>";
-
-    $db->moveSuspect($row, $column, $db->getPlayersGameID($_SESSION["id"]), suspectId );
+    echo "<pre>";
+    print_r($suspectId);
+    echo "</pre>";
+    $db->moveSuspect($row, $column, $db->getPlayersGameID($_SESSION["id"]), $suspectId );
 
 
 
@@ -62,6 +66,10 @@ $room = $db->getRoomFromCoordinates($row,$column);
 //else, set the next players turn, and unset the current players turn.
 
 $db->updateGameTurnToNextPlayer($db->getPlayersGameID($_SESSION["id"]));
+
+$notificationText = " has changed the state on game board ";
+
+$db->createNotification($_SESSION["id"], $db->getPlayersGameID($_SESSION["id"]), $notificationText);
 
 // then return to the gameB_board.phtml page
 header('Location: ./home.phtml');
