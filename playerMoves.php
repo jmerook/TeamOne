@@ -14,9 +14,6 @@ $column = $move[1];
 
 $suspect = $_POST['suspect'];
 
-echo "<pre>";
-print_r($suspect);
-echo "</pre>";
 $weapon = $_POST['weapon'];
 
 $occupant = $db->getCellContents($row, $column, $db->getPlayersGameID($_SESSION["id"]));
@@ -27,11 +24,9 @@ if(isset($occupant))
     //TODO somone needs to write a static html page saying this isn't a valid move and it needs a button to redirect to the home.phtml page
     debug_to_console( "Test" );
 }
-else
-{
+else {
 
-    $db->movePlayer($row, $column, $db->getPlayersGameID($_SESSION["id"]), $_SESSION["id"] );
-    debug_to_console( "room is not occupied" );
+    $db->movePlayer($row, $column, $db->getPlayersGameID($_SESSION["id"]), $_SESSION["id"]);
 }
 
 //todo check to see if they have made a suggestion, if so check their suggestion again the secret envelope for that game
